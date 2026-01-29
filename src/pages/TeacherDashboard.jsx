@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import {
   uploadFile,
   getMyFiles,
@@ -23,7 +23,7 @@ export default function TeacherDashboard() {
   const [view, setView] = useState("my");
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-  const [error, setError] = useState("");
+  
 
 
   const [form, setForm] = useState({
@@ -34,18 +34,23 @@ export default function TeacherDashboard() {
   });
 
   /* ================= FETCH FILES ================= */
-  const fetchFiles = async () => {
-    try {
-      const res = view === "my" ? await getMyFiles() : await getAllFiles();
-      setFiles(res.data.files || []);
-    } catch {
-      alert("Failed to load files");
-    }
-  };
+ const fetchFiles = useCallback(async () => {
+  try {
+    const res = view === "my" ? await getMyFiles() : await getAllFiles();
+    setFiles(res.data.files || []);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to load files");
+  }
+}, [view]);
 
-  useEffect(() => {
-    if (user?.role === "teacher") fetchFiles();
-  }, [view, user]);
+
+ useEffect(() => {
+  if (user?.role === "teacher") {
+    fetchFiles();
+  }
+}, [fetchFiles, user]);
+
 
   /* ================= FORM ================= */
   const handleChange = (e) => {
@@ -88,8 +93,9 @@ export default function TeacherDashboard() {
     await deleteFile(fileId);
     setFiles((prev) => prev.filter((f) => f._id !== fileId));
   } catch (err) {
-    setError(err.response?.data?.message || "Failed to delete file");
-  }
+  console.error(err);
+  alert("Failed to delete file");
+}
 };
 
 
