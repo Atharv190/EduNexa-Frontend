@@ -95,7 +95,7 @@ export default function StudentDashboard() {
             <div className="bg-indigo-500/20 p-1.5 rounded-lg text-indigo-400">
               <Sparkles size={18} />
             </div>
-            <span className="font-bold text-lg">StudyGeni</span>
+            <span className="font-bold text-lg">EduNexa</span>
           </div>
 
           <div className="flex items-center gap-4">
