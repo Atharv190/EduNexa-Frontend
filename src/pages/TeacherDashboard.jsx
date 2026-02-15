@@ -15,6 +15,14 @@ import {
   User,
 } from "lucide-react";
 
+const handleDownload = (fileId) => {
+  const API_URL =
+    process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
+  window.location.href = `${API_URL}/files/download/${fileId}`;
+};
+
+
 export default function TeacherDashboard() {
   const { user, logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -252,41 +260,49 @@ export default function TeacherDashboard() {
                   </div>
 
                   <div className="flex gap-4 text-sm font-semibold flex-wrap">
-                    <a
-                      href={file.fileUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-indigo-400 hover:underline"
-                    >
-                      Open
-                    </a>
 
-                    <button
-                      onClick={() =>
-                        navigate(`/files/${file._id}/summary`)
-                      }
-                      className="text-green-400 hover:underline"
-                    >
-                      Summary
-                    </button>
+  <a
+    href={file.fileUrl}
+    target="_blank"
+    rel="noreferrer"
+    className="text-indigo-400 hover:underline"
+  >
+    Open
+  </a>
 
-                    <button
-                      onClick={() => navigate(`/files/${file._id}/quiz`)}
-                      className="text-purple-400 hover:underline"
-                    >
-                      Quiz
-                    </button>
+  {/* ✅ DOWNLOAD (ALL FILES) */}
+  <button
+    onClick={() => handleDownload(file._id)}
+    className="text-sky-400 hover:underline"
+  >
+    Download
+  </button>
 
-                    {/* 🔥 DELETE ONLY MY FILES */}
-                    {view === "my" && (
-                      <button
-                        onClick={() => handleDelete(file._id)}
-                        className="text-red-400 hover:underline"
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </div>
+  <button
+    onClick={() => navigate(`/files/${file._id}/summary`)}
+    className="text-green-400 hover:underline"
+  >
+    Summary
+  </button>
+
+  <button
+    onClick={() => navigate(`/files/${file._id}/quiz`)}
+    className="text-purple-400 hover:underline"
+  >
+    Quiz
+  </button>
+
+  {/* 🔥 DELETE ONLY MY FILES */}
+  {view === "my" && (
+    <button
+      onClick={() => handleDelete(file._id)}
+      className="text-red-400 hover:underline"
+    >
+      Delete
+    </button>
+  )}
+</div>
+
                 </div>
               ))}
             </div>

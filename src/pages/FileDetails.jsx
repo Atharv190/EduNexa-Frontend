@@ -9,6 +9,9 @@ import {
   HelpCircle,
 } from "lucide-react";
 
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:3000/api";
+
 export default function FileDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -29,8 +32,6 @@ export default function FileDetails() {
     })();
   }, [id]);
 
-  /* ================= STATES ================= */
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#020617] text-slate-400">
@@ -47,23 +48,15 @@ export default function FileDetails() {
     );
   }
 
-  /* ================= UI ================= */
-
   return (
     <div className="min-h-screen bg-[#020617] flex items-center justify-center px-6">
-
-      {/* ===== CARD ===== */}
-      <div className="
-        w-full max-w-xl
-        bg-white/5 border border-white/10
-        rounded-3xl shadow-2xl shadow-indigo-500/10
-      ">
+      <div className="w-full max-w-xl bg-white/5 border border-white/10 rounded-3xl shadow-2xl">
 
         {/* Back */}
         <div className="px-6 pt-6">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-indigo-400 transition"
+            className="flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-indigo-400"
           >
             <ArrowLeft size={16} />
             Back to Files
@@ -72,18 +65,13 @@ export default function FileDetails() {
 
         {/* Header */}
         <div className="px-8 pt-6 pb-4 flex items-start gap-5">
-          <div className="
-            w-14 h-14 rounded-2xl flex items-center justify-center
-            bg-indigo-500/20 text-indigo-400
-          ">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center bg-indigo-500/20 text-indigo-400">
             <FileText size={26} />
           </div>
 
           <div className="flex-1">
-            <h1 className="text-2xl font-black text-white leading-tight">
-              {file.title}
-            </h1>
-            <p className="mt-1 text-xs uppercase tracking-widest font-semibold text-slate-400">
+            <h1 className="text-2xl font-black text-white">{file.title}</h1>
+            <p className="text-xs uppercase tracking-widest text-slate-400">
               {file.subject || "GENERAL STUDY"}
             </p>
           </div>
@@ -91,56 +79,40 @@ export default function FileDetails() {
 
         {/* Description */}
         {file.description && (
-          <div className="px-8 pb-6 text-slate-400 text-sm leading-relaxed">
+          <div className="px-8 pb-6 text-slate-400 text-sm">
             {file.description}
           </div>
         )}
 
         {/* Actions */}
         <div className="px-8 pb-8 flex flex-col gap-4">
-
-          {/* Download (manual only – no auto download) */}
-          {file.fileUrl && (
-            <a
-              href={file.fileUrl}
-              download
-              className="
-                inline-flex items-center justify-center gap-2
-                px-6 py-3 rounded-xl
-                bg-indigo-600 text-white font-bold
-                hover:bg-indigo-500 transition
-              "
-            >
-              <Download size={18} />
-              Download Material
-            </a>
-          )}
+          {/* ✅ AUTO DOWNLOAD – ORIGINAL FILE */}
+          <button
+            onClick={() =>
+              (window.location.href =
+                `${API_BASE_URL}/files/download/${file._id}`)
+            }
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-500"
+          >
+            <Download size={18} />
+            Download Material
+          </button>
 
           {/* Secondary actions */}
           <div className="flex gap-3">
             <Link
               to={`/files/${id}/summary`}
-              className="
-                flex-1 inline-flex items-center justify-center gap-2
-                px-4 py-3 rounded-xl
-                bg-white/10 text-indigo-300 font-semibold
-                hover:bg-indigo-500/20 transition
-              "
+              className="flex-1 px-4 py-3 rounded-xl bg-white/10 text-indigo-300 font-semibold text-center"
             >
-              <Sparkles size={16} />
+              <Sparkles size={16} className="inline mr-2" />
               View Summary
             </Link>
 
             <Link
               to={`/files/${id}/quiz`}
-              className="
-                flex-1 inline-flex items-center justify-center gap-2
-                px-4 py-3 rounded-xl
-                bg-white/10 text-emerald-300 font-semibold
-                hover:bg-emerald-500/20 transition
-              "
+              className="flex-1 px-4 py-3 rounded-xl bg-white/10 text-emerald-300 font-semibold text-center"
             >
-              <HelpCircle size={16} />
+              <HelpCircle size={16} className="inline mr-2" />
               Generate Quiz
             </Link>
           </div>

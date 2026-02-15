@@ -26,7 +26,7 @@ export default function Files() {
       {/* ================= TOP HEADER ================= */}
       <header className="sticky top-0 z-30 bg-[#020617]/90 backdrop-blur-xl border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          
+
           {/* Title */}
           <div className="flex items-center gap-3">
             <div className="bg-indigo-500/20 p-2 rounded-xl text-indigo-400">
@@ -135,9 +135,10 @@ export default function Files() {
                       View Material
                     </Link>
 
-                    {f.fileUrl && (
-                     <a
-  href={f.fileUrl.replace("/upload/", "/upload/fl_attachment/")}
+                    {/* ✅ BACKEND DOWNLOAD (NO AUTH, ORIGINAL FILE) */}
+                    {/* ✅ BACKEND DOWNLOAD (NO AUTH, ORIGINAL FILE) */}
+<a
+  href={`${process.env.REACT_APP_API_URL}/files/download/${f._id}`}
   className="
     inline-flex items-center gap-1
     text-xs font-semibold
@@ -147,11 +148,10 @@ export default function Files() {
     transition
   "
 >
+  <Download size={14} />
+  Download
+</a>
 
-                        <Download size={14} />
-                        Download
-                      </a>
-                    )}
                   </div>
                 </div>
               ))}
