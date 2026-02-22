@@ -76,49 +76,48 @@ export default function Home() {
 
       {/* ================= NAVBAR ================= */}
       <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${scrolled
-          ? "backdrop-blur-xl bg-[#03050C]/80 border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)] py-1"
-          : "bg-transparent border-transparent py-2"
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className={`fixed top-0 sm:top-4 inset-x-0 sm:inset-x-6 lg:max-w-5xl lg:mx-auto z-50 transition-all duration-500 ${scrolled
+          ? "sm:rounded-full bg-[#03050C]/60 backdrop-blur-xl border-b sm:border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.4)] px-4 sm:px-2 py-2 sm:py-1.5"
+          : "bg-transparent border-b sm:border border-transparent py-4 sm:py-2 px-4 sm:px-2"
           }`}
       >
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 h-14 md:h-16 flex items-center justify-between">
+        <nav className="relative h-12 flex items-center justify-between px-2">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 flex items-center justify-center border border-white/10 group-hover:scale-105 group-hover:border-indigo-500/50 transition-all duration-300 shadow-[0_0_15px_rgba(99,102,241,0.15)]">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400 group-hover:text-fuchsia-400 transition-colors" />
+          <Link to="/" className="flex items-center gap-3 group relative z-50">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 flex items-center justify-center border border-white/10 group-hover:border-indigo-500/40 transition-all duration-300 shadow-[0_0_15px_rgba(99,102,241,0.15)] group-hover:shadow-[0_0_25px_rgba(99,102,241,0.3)]">
+              <Sparkles className="w-5 h-5 text-indigo-400 group-hover:text-fuchsia-400 transition-colors" />
             </div>
-            <div className="flex flex-col leading-tight">
-              <span className="font-extrabold text-lg sm:text-lg text-white tracking-tight">EduNexa</span>
-            </div>
+            <span className="font-extrabold text-xl text-white tracking-tight flex items-center gap-1.5">
+              EduNexa
+            </span>
           </Link>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-2 lg:gap-3">
+          <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/5">
             <Link
               to="/signup"
               state={{ role: "student" }}
-              className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+              className="px-5 py-2 rounded-full text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all"
             >
               Student
             </Link>
-            <div className="w-px h-4 bg-white/10 mx-1" />
             <Link
               to="/login"
-              className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white transition-all"
+              className="px-5 py-2 rounded-full text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all"
             >
               Log in
             </Link>
             <Link
               to="/signup"
               state={{ role: "teacher" }}
-              className="relative group px-5 py-2 rounded-xl bg-white text-[#03050C] text-sm font-bold overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]"
+              className="relative group px-6 py-2 rounded-full bg-white text-[#03050C] text-sm font-bold overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] ml-1"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-100 to-fuchsia-100 opacity-0 group-hover:opacity-100 transition-opacity" />
               <span className="relative flex items-center gap-2">
-                Teacher <ArrowRight className="w-4 h-4" />
+                Join as Teacher <ArrowRight className="w-4 h-4 ml-0.5" />
               </span>
             </Link>
           </div>
@@ -126,7 +125,7 @@ export default function Home() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+            className="md:hidden relative z-50 p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors focus:outline-none"
           >
             <AnimatePresence mode="wait">
               {mobileMenuOpen ? (
@@ -145,39 +144,63 @@ export default function Home() {
         {/* Mobile Menu Dropdown */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden bg-[#03050C]/95 backdrop-blur-3xl border-b border-white/10"
-            >
-              <div className="px-4 py-5 flex flex-col gap-2">
-                <Link
-                  to="/signup"
-                  state={{ role: "student" }}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm font-semibold text-white hover:bg-white/10 transition-all text-center"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Student Sign Up
-                </Link>
-                <Link
-                  to="/signup"
-                  state={{ role: "teacher" }}
-                  className="w-full px-4 py-2.5 rounded-xl bg-white text-[#03050C] text-sm font-bold hover:shadow-lg transition-all text-center flex items-center justify-center gap-2"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Teacher Sign Up <ArrowRight className="w-4 h-4" />
-                </Link>
-                <div className="h-px w-full bg-white/10 my-1" />
-                <Link
-                  to="/login"
-                  className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:text-white transition-all text-center"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  I already have an account
-                </Link>
-              </div>
-            </motion.div>
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 top-[4rem] sm:top-[5rem] -mx-4 sm:-mx-6 z-40 bg-[#03050C]/60 backdrop-blur-md md:hidden min-h-screen"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+              {/* Menu Card */}
+              <motion.div
+                initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute left-0 right-0 mt-2 sm:mt-4 mx-2 sm:mx-0 z-50 md:hidden overflow-hidden bg-[#0a0d16] border border-white/10 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+              >
+                <div className="p-4 flex flex-col gap-3">
+                  <Link
+                    to="/signup"
+                    state={{ role: "student" }}
+                    className="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/5 text-sm font-semibold text-white hover:bg-white/10 transition-all flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                      <AcademicCapIcon className="w-5 h-5" />
+                    </div>
+                    Student Sign Up
+                  </Link>
+                  <Link
+                    to="/signup"
+                    state={{ role: "teacher" }}
+                    className="relative group overflow-hidden w-full px-5 py-3.5 rounded-xl bg-white text-[#03050C] text-sm font-bold shadow-lg transition-all flex items-center gap-3"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-100 to-fuchsia-100 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative z-10 flex items-center justify-between w-full">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-[#03050C]/10 flex items-center justify-center">
+                          <UserGroupIcon className="w-5 h-5 text-[#03050C]" />
+                        </div>
+                        Teacher Sign Up
+                      </div>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </Link>
+                  <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent my-2" />
+                  <Link
+                    to="/login"
+                    className="w-full px-5 py-3 rounded-xl text-sm font-semibold text-slate-400 hover:text-white hover:bg-white/5 transition-all text-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    I already have an account
+                  </Link>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </motion.header>
