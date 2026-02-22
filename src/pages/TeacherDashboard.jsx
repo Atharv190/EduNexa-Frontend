@@ -14,12 +14,10 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
+import api from "../api/axios";
 
 const handleDownload = (fileId) => {
-  const API_URL =
-    process.env.REACT_APP_API_URL || "http://localhost:5000/api";
-
-  window.location.href = `${API_URL}/files/download/${fileId}`;
+  window.location.href = `${api.defaults.baseURL}/files/download/${fileId}`;
 };
 
 
@@ -104,6 +102,53 @@ export default function TeacherDashboard() {
   console.error(err);
   alert("Failed to delete file");
 }
+};
+
+const handleOpen = async (fileId, fileName) => {
+  try {
+    const res = await api.get(`/files/download/${fileId}`, {
+      responseType: "blob",
+    });
+
+    const pdfBlob = new Blob([res.data], { type: "application/pdf" });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>${fileName || "Study Material"}</title>
+          <style>
+            html, body {
+              margin: 0;
+              height: 100%;
+            }
+            iframe {
+              width: 100%;
+              height: 100%;
+              border: none;
+            }
+          </style>
+        </head>
+        <body>
+          <iframe src="${pdfUrl}"></iframe>
+        </body>
+      </html>
+    `;
+
+    const htmlBlob = new Blob([html], { type: "text/html" });
+    const htmlUrl = URL.createObjectURL(htmlBlob);
+
+    window.open(htmlUrl, "_blank");
+
+    setTimeout(() => {
+      URL.revokeObjectURL(pdfUrl);
+      URL.revokeObjectURL(htmlUrl);
+    }, 15000);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to open file");
+  }
 };
 
 
@@ -261,14 +306,12 @@ export default function TeacherDashboard() {
 
                   <div className="flex gap-4 text-sm font-semibold flex-wrap">
 
-  <a
-    href={file.fileUrl}
-    target="_blank"
-    rel="noreferrer"
-    className="text-indigo-400 hover:underline"
-  >
-    Open
-  </a>
+  <button
+  onClick={() => handleOpen(file._id, file.title)}
+  className="text-indigo-400 hover:underline"
+>
+  Open
+</button>
 
   {/* ✅ DOWNLOAD (ALL FILES) */}
   <button
