@@ -15,7 +15,6 @@ import {
   Activity,
   Menu,
   X,
-  Play
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
