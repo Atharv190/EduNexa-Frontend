@@ -195,8 +195,8 @@ export default function TeacherDashboard() {
       </div>
 
       {/* Floating Navbar Matching User Request */}
-      <nav className="sticky top-0 z-50 pt-4 px-4 sm:px-6 transition-all">
-        <div className="max-w-7xl mx-auto h-[72px] bg-[#070b14] border border-[#1e2336] rounded-[20px] flex justify-between items-center px-4 sm:px-5 shadow-lg relative z-50">
+      <nav className="sticky top-0 z-50 pt-4 px-4 sm:px-6 transition-all w-full">
+        <div className="w-full max-w-7xl mx-auto h-[72px] bg-[#070b14] border border-[#1e2336] rounded-[20px] flex justify-between items-center px-4 sm:px-5 shadow-lg relative z-50">
           <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer z-50">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0d1224] border border-[#1e2336] flex items-center justify-center">
               <Sparkles className="text-indigo-400 w-4 h-4 sm:w-5 sm:h-5" />
@@ -251,61 +251,49 @@ export default function TeacherDashboard() {
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <>
-              {/* Click-away Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 top-[88px] bg-[#020510]/80 backdrop-blur-sm z-40 lg:hidden min-h-screen"
-                onClick={() => setIsMobileMenuOpen(false)}
-              />
-
-              {/* Mobile Menu Dropdown */}
-              <motion.div
-                initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-[88px] left-4 right-4 bg-[#070b14]/95 backdrop-blur-2xl border border-[#1e2336] rounded-[24px] p-5 shadow-[0_20px_40px_rgba(0,0,0,0.6)] z-50 lg:hidden flex flex-col gap-4 origin-top"
-              >
-                {/* Mobile Stats */}
-                <div className="flex flex-col gap-3 bg-[#0d1224] rounded-2xl p-5 border border-[#1e2336]">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">My Files</span>
-                    </div>
-                    <span className="text-xl font-black text-white">{myFilesCount}</span>
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-[88px] left-4 right-4 bg-[#070b14]/95 backdrop-blur-2xl border border-[#1e2336] rounded-[24px] p-5 shadow-2xl z-40 lg:hidden flex flex-col gap-4 origin-top"
+            >
+              {/* Mobile Stats */}
+              <div className="flex flex-col gap-3 bg-[#0d1224] rounded-2xl p-5 border border-[#1e2336]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">My Files</span>
                   </div>
-                  <div className="w-full h-[1px] bg-[#1e2336] opacity-50"></div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.5)]"></div>
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Global Files</span>
-                    </div>
-                    <span className="text-xl font-black text-white">{globalFilesCount}</span>
-                  </div>
+                  <span className="text-xl font-black text-white">{myFilesCount}</span>
                 </div>
-
-                {/* Mobile User Info */}
-                <div className="flex items-center gap-4 p-4 rounded-xl bg-[#0d1224] border border-[#1e2336]">
-                  <div className="bg-[#1a2138] p-3 rounded-xl flex items-center justify-center">
-                    <User size={20} className="text-indigo-300" />
+                <div className="w-full h-[1px] bg-[#1e2336] opacity-50"></div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.5)]"></div>
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Global Files</span>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Logged in as</span>
-                    <span className="text-[15px] font-bold text-white">{user.username || user.name}</span>
-                  </div>
+                  <span className="text-xl font-black text-white">{globalFilesCount}</span>
                 </div>
+              </div>
 
-                {/* Mobile Logout */}
-                <button onClick={handleLogout} className="w-full py-4 mt-2 rounded-[16px] bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-colors active:scale-[0.98]">
-                  <LogOut size={18} />
-                  <span>Logout securely</span>
-                </button>
-              </motion.div>
-            </>
+              {/* Mobile User Info */}
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-[#0d1224] border border-[#1e2336]">
+                <div className="bg-[#1a2138] p-3 rounded-xl flex items-center justify-center">
+                  <User size={20} className="text-indigo-300" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Logged in as</span>
+                  <span className="text-[15px] font-bold text-white">{user.username || user.name}</span>
+                </div>
+              </div>
+
+              {/* Mobile Logout */}
+              <button onClick={handleLogout} className="w-full py-4 mt-2 rounded-[16px] bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-colors active:scale-[0.98]">
+                <LogOut size={18} />
+                <span>Logout securely</span>
+              </button>
+            </motion.div>
           )}
         </AnimatePresence>
       </nav>
