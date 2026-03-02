@@ -15,7 +15,9 @@ import {
   Eye,
   Brain,
   MessageSquare,
-  CloudUpload
+  CloudUpload,
+  Menu,
+  X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
@@ -48,6 +50,7 @@ export default function TeacherDashboard() {
   const [view, setView] = useState("my"); // 'my' or 'all'
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -191,48 +194,108 @@ export default function TeacherDashboard() {
         <div className="absolute top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.08),transparent_60%)]" />
       </div>
 
-      {/* Floating Navbar */}
-      <nav className="sticky top-0 z-40 pt-4 px-4 sm:px-6 transition-all">
-        <div className="max-w-7xl mx-auto h-16 sm:h-20 bg-[#060b19]/80 backdrop-blur-3xl border border-white/10 rounded-2xl flex justify-between items-center px-4 sm:px-6 shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
-          <div className="flex items-center gap-3 group cursor-pointer z-50">
-            <div className="w-10 h-10 rounded-xl bg-[#0a0f1c] border border-white/20 flex items-center justify-center group-hover:bg-indigo-500/20 group-hover:border-indigo-500/40 transition-all shadow-inner">
-              <Sparkles className="text-indigo-400 w-5 h-5 group-hover:text-white transition-colors" />
+      {/* Floating Navbar Matching User Request */}
+      <nav className="sticky top-0 z-50 pt-4 px-4 sm:px-6 transition-all">
+        <div className="max-w-7xl mx-auto h-[72px] bg-[#070b14] border border-[#1e2336] rounded-[20px] flex justify-between items-center px-4 sm:px-5 shadow-lg relative z-50">
+          <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer z-50">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0d1224] border border-[#1e2336] flex items-center justify-center">
+              <Sparkles className="text-indigo-400 w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <span className="font-extrabold text-xl sm:text-2xl text-white tracking-tight">EduNexa</span>
-            <span className="hidden sm:inline-flex px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-[10px] uppercase font-bold tracking-widest text-indigo-300 ml-2">Teacher</span>
+            <span className="inline-flex px-2 sm:px-3 py-1 rounded-lg bg-[#141a30] text-[10px] uppercase font-bold tracking-widest text-[#a5b4fc] ml-1 sm:ml-2">Teacher</span>
           </div>
 
-          <div className="flex items-center gap-4 hidden sm:flex">
-            {/* Global & Own Counts pinned to Header */}
-            <div className="flex items-center gap-4 px-5 py-2 rounded-xl bg-[#0a0f1c] border border-white/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
-              <div className="flex items-center gap-3 border-r border-white/10 pr-4">
-                <div className="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.8)]"></div>
-                <div className="flex flex-col">
-                  <span className="text-[10px] uppercase font-semibold text-slate-500 leading-none">My Files</span>
-                  <span className="text-sm font-black text-white leading-tight">{myFilesCount}</span>
+          <div className="hidden lg:flex items-center gap-4">
+            {/* Global & Own Counts matching screenshot perfectly */}
+            <div className="flex items-center h-12 bg-[#0d1224] border border-[#1e2336] rounded-xl px-5 gap-5 backdrop-blur-sm">
+              <div className="flex items-center gap-3 border-r border-[#1e2336] pr-5 h-full">
+                <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
+                <div className="flex flex-col justify-center">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">My Files</span>
+                  <span className="text-base font-black text-white leading-none tracking-tight">{myFilesCount}</span>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]"></div>
-                <div className="flex flex-col">
-                  <span className="text-[10px] uppercase font-semibold text-slate-500 leading-none">Global</span>
-                  <span className="text-sm font-black text-white leading-tight">{globalFilesCount}</span>
+                <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.5)]"></div>
+                <div className="flex flex-col justify-center">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Global</span>
+                  <span className="text-base font-black text-white leading-none tracking-tight">{globalFilesCount}</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 py-2 px-4 rounded-xl bg-white/5 border border-white/5 text-sm font-medium text-slate-200 backdrop-blur-md">
-              <div className="bg-[#1e2336] p-1.5 rounded-md">
+            {/* User Component matching screenshot perfectly */}
+            <div className="flex items-center h-12 gap-3 px-4 rounded-xl bg-[#0d1224] border border-[#1e2336] text-sm font-bold text-slate-200 backdrop-blur-sm">
+              <div className="bg-[#1a2138] p-1.5 rounded-lg flex items-center justify-center">
                 <User size={16} className="text-indigo-300" />
               </div>
-              <span>{user.username || user.name}</span>
+              <span className="tracking-wide text-[14px]">{user.username || user.name}</span>
             </div>
-            <button onClick={handleLogout} className="p-2.5 rounded-xl bg-white/5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border border-transparent hover:border-red-500/30 transition-all flex items-center gap-2 text-sm font-bold">
-              <LogOut size={18} />
-              <span className="hidden lg:inline">Logout</span>
+
+            {/* Logout Component matching screenshot perfectly */}
+            <button onClick={handleLogout} className="h-12 px-5 rounded-xl bg-[#0d1224] hover:bg-[#1a2138] border border-[#1e2336] transition-all flex items-center justify-center gap-2 text-[14px] font-bold text-slate-300">
+              <LogOut size={16} className="text-slate-400" />
+              <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="lg:hidden p-2.5 rounded-xl bg-[#0d1224] border border-[#1e2336] text-slate-300 flex items-center justify-center transition-all hover:bg-[#1a2138]"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-[88px] left-4 right-4 bg-[#070b14]/95 backdrop-blur-2xl border border-[#1e2336] rounded-[24px] p-5 shadow-2xl z-40 lg:hidden flex flex-col gap-4 origin-top"
+            >
+              {/* Mobile Stats */}
+              <div className="flex flex-col gap-3 bg-[#0d1224] rounded-2xl p-5 border border-[#1e2336]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">My Files</span>
+                  </div>
+                  <span className="text-xl font-black text-white">{myFilesCount}</span>
+                </div>
+                <div className="w-full h-[1px] bg-[#1e2336] opacity-50"></div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.5)]"></div>
+                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Global Files</span>
+                  </div>
+                  <span className="text-xl font-black text-white">{globalFilesCount}</span>
+                </div>
+              </div>
+
+              {/* Mobile User Info */}
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-[#0d1224] border border-[#1e2336]">
+                <div className="bg-[#1a2138] p-3 rounded-xl flex items-center justify-center">
+                  <User size={20} className="text-indigo-300" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Logged in as</span>
+                  <span className="text-[15px] font-bold text-white">{user.username || user.name}</span>
+                </div>
+              </div>
+
+              {/* Mobile Logout */}
+              <button onClick={handleLogout} className="w-full py-4 mt-2 rounded-[16px] bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-colors active:scale-[0.98]">
+                <LogOut size={18} />
+                <span>Logout securely</span>
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-24 relative z-10 transition-all duration-300">
