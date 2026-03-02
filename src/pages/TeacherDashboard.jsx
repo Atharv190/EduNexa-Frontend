@@ -171,6 +171,28 @@ export default function TeacherDashboard() {
     navigate("/");
   };
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isMobileMenuOpen && !e.target.closest('.mobile-menu-container')) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMobileMenuOpen]);
+
+  // Close mobile menu when window resizes to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   if (!user) return null;
 
   return (
@@ -194,19 +216,21 @@ export default function TeacherDashboard() {
         <div className="absolute top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.08),transparent_60%)]" />
       </div>
 
-      {/* Floating Navbar Matching User Request */}
+      {/* Floating Navbar - Responsive */}
       <nav className="sticky top-0 z-50 pt-4 px-4 sm:px-6 transition-all w-full">
         <div className="w-full max-w-7xl mx-auto h-[72px] bg-[#070b14] border border-[#1e2336] rounded-[20px] flex justify-between items-center px-4 sm:px-5 shadow-lg relative z-50">
+          {/* Logo Section */}
           <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer z-50">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0d1224] border border-[#1e2336] flex items-center justify-center">
               <Sparkles className="text-indigo-400 w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <span className="font-extrabold text-xl sm:text-2xl text-white tracking-tight">EduNexa</span>
-            <span className="inline-flex px-2 sm:px-3 py-1 rounded-lg bg-[#141a30] text-[10px] uppercase font-bold tracking-widest text-[#a5b4fc] ml-1 sm:ml-2">Teacher</span>
+            <span className="hidden sm:inline-flex px-2 sm:px-3 py-1 rounded-lg bg-[#141a30] text-[10px] uppercase font-bold tracking-widest text-[#a5b4fc] ml-1 sm:ml-2">Teacher</span>
           </div>
 
+          {/* Desktop Menu - Hidden on mobile */}
           <div className="hidden lg:flex items-center gap-4">
-            {/* Global & Own Counts matching screenshot perfectly */}
+            {/* Global & Own Counts */}
             <div className="flex items-center h-12 bg-[#0d1224] border border-[#1e2336] rounded-xl px-5 gap-5 backdrop-blur-sm">
               <div className="flex items-center gap-3 border-r border-[#1e2336] pr-5 h-full">
                 <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
@@ -224,7 +248,7 @@ export default function TeacherDashboard() {
               </div>
             </div>
 
-            {/* User Component matching screenshot perfectly */}
+            {/* User Component */}
             <div className="flex items-center h-12 gap-3 px-4 rounded-xl bg-[#0d1224] border border-[#1e2336] text-sm font-bold text-slate-200 backdrop-blur-sm">
               <div className="bg-[#1a2138] p-1.5 rounded-lg flex items-center justify-center">
                 <User size={16} className="text-indigo-300" />
@@ -232,7 +256,7 @@ export default function TeacherDashboard() {
               <span className="tracking-wide text-[14px]">{user.username || user.name}</span>
             </div>
 
-            {/* Logout Component matching screenshot perfectly */}
+            {/* Logout Button */}
             <button onClick={handleLogout} className="h-12 px-5 rounded-xl bg-[#0d1224] hover:bg-[#1a2138] border border-[#1e2336] transition-all flex items-center justify-center gap-2 text-[14px] font-bold text-slate-300">
               <LogOut size={16} className="text-slate-400" />
               <span className="hidden sm:inline">Logout</span>
@@ -241,71 +265,129 @@ export default function TeacherDashboard() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="lg:hidden p-2.5 rounded-xl bg-[#0d1224] border border-[#1e2336] text-slate-300 flex items-center justify-center transition-all hover:bg-[#1a2138]"
+            className="lg:hidden p-2.5 rounded-xl bg-[#0d1224] border border-[#1e2336] text-slate-300 flex items-center justify-center transition-all hover:bg-[#1a2138] relative z-50"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
-        {/* Mobile Menu Overlay */}
+        {/* Mobile Menu Overlay - Improved responsive design */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="absolute top-[88px] left-4 right-4 bg-[#070b14]/95 backdrop-blur-2xl border border-[#1e2336] rounded-[24px] p-5 shadow-2xl z-40 lg:hidden flex flex-col gap-4 origin-top"
-            >
-              {/* Mobile Stats */}
-              <div className="flex flex-col gap-3 bg-[#0d1224] rounded-2xl p-5 border border-[#1e2336]">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
-                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">My Files</span>
-                  </div>
-                  <span className="text-xl font-black text-white">{myFilesCount}</span>
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+              
+              {/* Menu Panel */}
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
+                className="absolute top-[88px] left-4 right-4 bg-[#070b14]/95 backdrop-blur-2xl border border-[#1e2336] rounded-[24px] p-5 shadow-2xl z-50 lg:hidden flex flex-col gap-4 origin-top mobile-menu-container max-w-md mx-auto"
+              >
+                {/* Teacher Badge - Mobile */}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mobile Menu</span>
+                  <span className="inline-flex px-3 py-1.5 rounded-lg bg-[#141a30] text-[10px] uppercase font-bold tracking-widest text-[#a5b4fc]">Teacher</span>
                 </div>
-                <div className="w-full h-[1px] bg-[#1e2336] opacity-50"></div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.5)]"></div>
-                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Global Files</span>
-                  </div>
-                  <span className="text-xl font-black text-white">{globalFilesCount}</span>
-                </div>
-              </div>
 
-              {/* Mobile User Info */}
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-[#0d1224] border border-[#1e2336]">
-                <div className="bg-[#1a2138] p-3 rounded-xl flex items-center justify-center">
-                  <User size={20} className="text-indigo-300" />
+                {/* Mobile Stats - Enhanced for better visibility */}
+                <div className="flex flex-col gap-3 bg-[#0d1224] rounded-2xl p-5 border border-[#1e2336]">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-indigo-400 shadow-[0_0_12px_rgba(129,140,248,0.6)]"></div>
+                      <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">My Files</span>
+                    </div>
+                    <span className="text-2xl font-black text-white">{myFilesCount}</span>
+                  </div>
+                  <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#1e2336] to-transparent"></div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 rounded-full bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]"></div>
+                      <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">Global Files</span>
+                    </div>
+                    <span className="text-2xl font-black text-white">{globalFilesCount}</span>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Logged in as</span>
-                  <span className="text-[15px] font-bold text-white">{user.username || user.name}</span>
-                </div>
-              </div>
 
-              {/* Mobile Logout */}
-              <button onClick={handleLogout} className="w-full py-4 mt-2 rounded-[16px] bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-colors active:scale-[0.98]">
-                <LogOut size={18} />
-                <span>Logout securely</span>
-              </button>
-            </motion.div>
+                {/* Mobile User Info - Enhanced */}
+                <div className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-[#0d1224] to-[#0a0f1c] border border-[#1e2336]">
+                  <div className="bg-[#1a2138] p-3 rounded-xl flex items-center justify-center shadow-inner">
+                    <User size={22} className="text-indigo-300" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Logged in as</span>
+                    <span className="text-base font-bold text-white">{user.username || user.name}</span>
+                    <span className="text-xs text-slate-400 mt-0.5">{user.email || ''}</span>
+                  </div>
+                </div>
+
+                {/* Quick Actions - Mobile */}
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  <button 
+                    onClick={() => {
+                      setView("my");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="py-3 px-4 rounded-xl bg-[#0d1224] border border-[#1e2336] text-sm font-bold text-slate-300 flex items-center justify-center gap-2 hover:bg-[#1a2138] transition-all active:scale-95"
+                  >
+                    <FileText size={16} className="text-indigo-400" />
+                    My Files
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setView("all");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="py-3 px-4 rounded-xl bg-[#0d1224] border border-[#1e2336] text-sm font-bold text-slate-300 flex items-center justify-center gap-2 hover:bg-[#1a2138] transition-all active:scale-95"
+                  >
+                    <Layout size={16} className="text-sky-400" />
+                    Library
+                  </button>
+                </div>
+
+                {/* Mobile Logout - Enhanced */}
+                <button 
+                  onClick={handleLogout} 
+                  className="w-full py-4 mt-2 rounded-[16px] bg-gradient-to-r from-red-500/10 to-red-500/5 hover:from-red-500/20 hover:to-red-500/10 text-red-400 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:text-red-300"
+                >
+                  <LogOut size={18} />
+                  <span>Logout securely</span>
+                </button>
+
+                {/* Version Info */}
+                <div className="text-center mt-2">
+                  <span className="text-[8px] text-slate-600">EduNexa Teacher v1.0</span>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-24 relative z-10 transition-all duration-300">
 
-        {/* MAIN SPLIT LAYOUT FOR CONTENT */}
-        <div className="grid xl:grid-cols-12 gap-8 lg:gap-10">
+        {/* MAIN SPLIT LAYOUT FOR CONTENT - Responsive grid */}
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
 
-          {/* UPLOAD FORM (Neat, Dark, Animated) */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, type: 'spring' }} className="xl:col-span-4 space-y-6">
-            <div className="sticky top-24 bg-[#080d1a]/80 border border-white/10 rounded-[2rem] p-6 sm:p-8 relative overflow-hidden backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all">
+          {/* UPLOAD FORM - Full width on mobile, 4 cols on desktop */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            transition={{ duration: 0.5, type: 'spring' }} 
+            className="lg:col-span-4 space-y-6"
+          >
+            <div className="lg:sticky lg:top-24 bg-[#080d1a]/80 border border-white/10 rounded-[2rem] p-6 sm:p-8 relative overflow-hidden backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all">
 
               {/* Neat header from screenshot */}
               <div className="flex items-center gap-4 mb-8 relative z-10">
@@ -321,17 +403,38 @@ export default function TeacherDashboard() {
               <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Title</label>
-                  <input name="title" placeholder="e.g. Advanced Mathematics v2" value={form.title} onChange={handleChange} required className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" />
+                  <input 
+                    name="title" 
+                    placeholder="e.g. Advanced Mathematics v2" 
+                    value={form.title} 
+                    onChange={handleChange} 
+                    required 
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" 
+                  />
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Subject</label>
-                  <input name="subject" placeholder="e.g. Mathematics" value={form.subject} onChange={handleChange} required className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" />
+                  <input 
+                    name="subject" 
+                    placeholder="e.g. Mathematics" 
+                    value={form.subject} 
+                    onChange={handleChange} 
+                    required 
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" 
+                  />
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="space-y-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Description</label>
-                  <textarea name="description" placeholder="Provide a brief overview..." value={form.description} onChange={handleChange} rows={3} className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium resize-none text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" />
+                  <textarea 
+                    name="description" 
+                    placeholder="Provide a brief overview..." 
+                    value={form.description} 
+                    onChange={handleChange} 
+                    rows={3} 
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium resize-none text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" 
+                  />
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="pt-2">
@@ -359,7 +462,13 @@ export default function TeacherDashboard() {
                   </div>
                 </motion.div>
 
-                <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} disabled={loading} className="w-full relative mt-2 group/btn inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-200 text-[#03050C] px-8 py-4.5 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-70 disabled:pointer-events-none text-sm">
+                <motion.button 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  transition={{ delay: 0.5 }} 
+                  disabled={loading} 
+                  className="w-full relative mt-2 group/btn inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-200 text-[#03050C] px-8 py-4.5 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-70 disabled:pointer-events-none text-sm"
+                >
                   <span className="relative flex items-center gap-2">
                     {loading ? <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" /> : <UploadCloud size={18} />}
                     {loading ? "UPLOADING..." : "UPLOAD"}
@@ -369,10 +478,15 @@ export default function TeacherDashboard() {
             </div>
           </motion.div>
 
-          {/* FILES LIST AREA */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, type: 'spring' }} className="xl:col-span-8">
+          {/* FILES LIST AREA - Full width on mobile, 8 cols on desktop */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            transition={{ duration: 0.5, type: 'spring' }} 
+            className="lg:col-span-8"
+          >
 
-            {/* Library Header */}
+            {/* Library Header - Responsive */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-8 bg-[#080d1a]/80 backdrop-blur-xl p-5 rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-[#12182b] rounded-xl flex items-center justify-center border border-white/5 shadow-inner">
@@ -384,7 +498,8 @@ export default function TeacherDashboard() {
                 </div>
               </div>
 
-              <div className="flex bg-[#03050C] p-1.5 rounded-xl border border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] w-full sm:w-auto overflow-x-auto scroolbar-hide">
+              {/* Tab Switcher - Scrollable on mobile */}
+              <div className="flex bg-[#03050C] p-1.5 rounded-xl border border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] w-full sm:w-auto overflow-x-auto scrollbar-hide">
                 {[
                   { id: 'my', label: 'My Uploads', count: myFilesCount, color: 'text-indigo-400 bg-indigo-500/10' },
                   { id: 'all', label: 'Global Library', count: globalFilesCount, color: 'text-sky-400 bg-sky-500/10' }
@@ -407,18 +522,18 @@ export default function TeacherDashboard() {
             </div>
 
             {files.length === 0 ? (
-              <div className="text-center py-24 bg-[#080d1a]/50 backdrop-blur-xl rounded-[2.5rem] border border-white/5 relative overflow-hidden group shadow-xl">
+              <div className="text-center py-16 sm:py-24 bg-[#080d1a]/50 backdrop-blur-xl rounded-[2.5rem] border border-white/5 relative overflow-hidden group shadow-xl">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-indigo-500/5 blur-[80px] rounded-full pointer-events-none transition-all duration-700"></div>
                 <div className="relative z-10">
-                  <div className="w-24 h-24 bg-[#12182b] rounded-3xl flex items-center justify-center mx-auto mb-6 border border-white/5 shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#12182b] rounded-3xl flex items-center justify-center mx-auto mb-6 border border-white/5 shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
                     <FileText className="text-slate-500" size={40} />
                   </div>
-                  <h3 className="text-3xl font-black text-white mb-3 tracking-tight">Nothing here yet</h3>
-                  <p className="text-slate-400 font-medium text-base max-w-sm mx-auto">Your uploaded resources will appear here. Utilize the neat upload panel to get started.</p>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white mb-3 tracking-tight">Nothing here yet</h3>
+                  <p className="text-slate-400 font-medium text-sm sm:text-base max-w-sm mx-auto px-4">Your uploaded resources will appear here. Utilize the neat upload panel to get started.</p>
                 </div>
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-5 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
                 <AnimatePresence>
                   {files.map((file, i) => (
                     <motion.div
@@ -428,18 +543,18 @@ export default function TeacherDashboard() {
                       exit={{ opacity: 0, scale: 0.95, y: -15 }}
                       transition={{ delay: i * 0.05, duration: 0.4, type: "spring", stiffness: 100 }}
                       key={file._id}
-                      className="rounded-[1.5rem] p-6 sm:p-7 bg-[#080d1a]/80 backdrop-blur-xl border border-white/5 hover:border-indigo-500/30 transition-all duration-300 group flex flex-col h-full relative overflow-hidden shadow-lg hover:shadow-[0_15px_40px_rgba(0,0,0,0.4)] hover:-translate-y-2"
+                      className="rounded-[1.5rem] p-5 sm:p-6 bg-[#080d1a]/80 backdrop-blur-xl border border-white/5 hover:border-indigo-500/30 transition-all duration-300 group flex flex-col h-full relative overflow-hidden shadow-lg hover:shadow-[0_15px_40px_rgba(0,0,0,0.4)] hover:-translate-y-2"
                     >
                       <div className="absolute -top-32 -right-32 w-64 h-64 bg-indigo-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
                       <div className="flex items-start justify-between mb-5 z-10 relative">
-                        <div className="flex items-start gap-4">
-                          <div className="w-16 h-16 bg-[#12182b] rounded-2xl flex items-center justify-center border border-white/5 flex-shrink-0 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/30 group-hover:scale-105 transition-all duration-300 shadow-inner">
-                            <BookOpen className="text-slate-400 group-hover:text-indigo-400" size={26} />
+                        <div className="flex items-start gap-3 sm:gap-4">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#12182b] rounded-2xl flex items-center justify-center border border-white/5 flex-shrink-0 group-hover:bg-indigo-500/20 group-hover:border-indigo-500/30 group-hover:scale-105 transition-all duration-300 shadow-inner">
+                            <BookOpen className="text-slate-400 group-hover:text-indigo-400" size={22} />
                           </div>
                           <div className="pt-1">
-                            <h3 className="text-lg font-black text-white line-clamp-2 leading-tight group-hover:text-indigo-300 transition-colors tracking-wide mb-2" title={file.title}>{file.title}</h3>
-                            <span className="inline-block px-2.5 py-1 rounded-md bg-[#03050C] border border-white/5 text-[10px] font-black uppercase tracking-widest text-slate-400 transition-colors shadow-inner">{file.subject || "General"}</span>
+                            <h3 className="text-base sm:text-lg font-black text-white line-clamp-2 leading-tight group-hover:text-indigo-300 transition-colors tracking-wide mb-2" title={file.title}>{file.title}</h3>
+                            <span className="inline-block px-2.5 py-1 rounded-md bg-[#03050C] border border-white/5 text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 transition-colors shadow-inner">{file.subject || "General"}</span>
                           </div>
                         </div>
                       </div>
@@ -449,33 +564,49 @@ export default function TeacherDashboard() {
                           <div className="bg-[#1e2336] p-1.5 rounded-md">
                             <User size={14} className="text-slate-300" />
                           </div>
-                          <span className="text-xs font-bold text-slate-300 truncate max-w-[150px]" title={file.createdBy.username}>By {file.createdBy.username}</span>
+                          <span className="text-xs font-bold text-slate-300 truncate max-w-[120px] sm:max-w-[150px]" title={file.createdBy.username}>By {file.createdBy.username}</span>
                         </div>
                       )}
 
                       <div className="mt-auto flex flex-col gap-2 pt-5 border-t border-white/5 z-10 relative">
                         <div className="grid grid-cols-2 gap-2">
-                          <button onClick={() => handleOpen(file._id, file.title)} className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#12182b] hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 border border-transparent hover:border-white/10">
-                            <Eye size={16} /> View
+                          <button 
+                            onClick={() => handleOpen(file._id, file.title)} 
+                            className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-[#12182b] hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 border border-transparent hover:border-white/10"
+                          >
+                            <Eye size={14} /> View
                           </button>
-                          <button onClick={() => handleDownload(file._id)} className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#12182b] hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 border border-transparent hover:border-white/10">
-                            <Download size={16} /> Download
+                          <button 
+                            onClick={() => handleDownload(file._id)} 
+                            className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-[#12182b] hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 border border-transparent hover:border-white/10"
+                          >
+                            <Download size={14} /> Download
                           </button>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
-                          <button onClick={() => navigate(`/files/${file._id}/summary`)} className="flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 group/ai">
-                            <Brain size={16} className="text-indigo-400 group-hover/ai:text-indigo-300" /> AI Summary
+                          <button 
+                            onClick={() => navigate(`/files/${file._id}/summary`)} 
+                            className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 group/ai"
+                          >
+                            <Brain size={14} className="text-indigo-400 group-hover/ai:text-indigo-300" /> Summary
                           </button>
-                          <button onClick={() => navigate(`/files/${file._id}/quiz`)} className="flex items-center justify-center gap-2 py-3 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 group/ai">
-                            <MessageSquare size={16} className="text-purple-400 group-hover/ai:text-purple-300" /> AI Quiz
+                          <button 
+                            onClick={() => navigate(`/files/${file._id}/quiz`)} 
+                            className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 group/ai"
+                          >
+                            <MessageSquare size={14} className="text-purple-400 group-hover/ai:text-purple-300" /> Quiz
                           </button>
                         </div>
                       </div>
 
                       {view === "my" && (
-                        <div className="absolute top-5 right-5 z-20">
-                          <button onClick={() => handleDelete(file._id)} className="p-3 rounded-xl bg-red-500/10 text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-500 hover:text-white border border-red-500/20 shadow-lg hover:scale-110 active:scale-95" title="Permanently Delete">
-                            <Trash2 size={18} />
+                        <div className="absolute top-4 right-4 z-20">
+                          <button 
+                            onClick={() => handleDelete(file._id)} 
+                            className="p-2.5 sm:p-3 rounded-xl bg-red-500/10 text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-500 hover:text-white border border-red-500/20 shadow-lg hover:scale-110 active:scale-95" 
+                            title="Permanently Delete"
+                          >
+                            <Trash2 size={16} />
                           </button>
                         </div>
                       )}
@@ -487,6 +618,17 @@ export default function TeacherDashboard() {
           </motion.div>
         </div>
       </main>
+
+      {/* Add custom scrollbar hide class */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 }
