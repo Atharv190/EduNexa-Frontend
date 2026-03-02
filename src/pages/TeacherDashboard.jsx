@@ -218,7 +218,7 @@ export default function TeacherDashboard() {
 
       {/* Floating Navbar - Responsive */}
       <nav className="sticky top-0 z-50 pt-4 px-4 sm:px-6 transition-all w-full">
-        <div className="w-full max-w-7xl mx-auto h-[72px] bg-[#070b14] border border-[#1e2336] rounded-[20px] flex justify-between items-center px-4 sm:px-5 shadow-lg relative z-50">
+        <div className="w-full max-w-5xl mx-auto h-[72px] bg-[#070b14] border border-[#1e2336] rounded-[20px] flex justify-between items-center px-4 sm:px-5 shadow-lg relative z-50">
           {/* Logo Section */}
           <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer z-50">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0d1224] border border-[#1e2336] flex items-center justify-center">
@@ -286,7 +286,7 @@ export default function TeacherDashboard() {
                 className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
                 onClick={() => setIsMobileMenuOpen(false)}
               />
-              
+
               {/* Menu Panel */}
               <motion.div
                 initial={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -334,7 +334,7 @@ export default function TeacherDashboard() {
 
                 {/* Quick Actions - Mobile */}
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                  <button 
+                  <button
                     onClick={() => {
                       setView("my");
                       setIsMobileMenuOpen(false);
@@ -344,7 +344,7 @@ export default function TeacherDashboard() {
                     <FileText size={16} className="text-indigo-400" />
                     My Files
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       setView("all");
                       setIsMobileMenuOpen(false);
@@ -357,8 +357,8 @@ export default function TeacherDashboard() {
                 </div>
 
                 {/* Mobile Logout - Enhanced */}
-                <button 
-                  onClick={handleLogout} 
+                <button
+                  onClick={handleLogout}
                   className="w-full py-4 mt-2 rounded-[16px] bg-gradient-to-r from-red-500/10 to-red-500/5 hover:from-red-500/20 hover:to-red-500/10 text-red-400 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:text-red-300"
                 >
                   <LogOut size={18} />
@@ -375,17 +375,17 @@ export default function TeacherDashboard() {
         </AnimatePresence>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-24 relative z-10 transition-all duration-300">
+      <main className="w-full max-w-5xl mx-auto px-4 sm:px-5 pt-8 pb-24 relative z-10 transition-all duration-300 flex flex-col items-center">
 
         {/* MAIN SPLIT LAYOUT FOR CONTENT - Responsive grid */}
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
+        <div className="w-full grid md:grid-cols-12 gap-6 lg:gap-8">
 
-          {/* UPLOAD FORM - Full width on mobile, 4 cols on desktop */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            transition={{ duration: 0.5, type: 'spring' }} 
-            className="lg:col-span-4 space-y-6"
+          {/* UPLOAD FORM - Full width on mobile, 5 cols on tablet, 4 on desktop */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, type: 'spring' }}
+            className="md:col-span-5 lg:col-span-4 space-y-6 w-full max-w-md mx-auto md:max-w-none"
           >
             <div className="lg:sticky lg:top-24 bg-[#080d1a]/80 border border-white/10 rounded-[2rem] p-6 sm:p-8 relative overflow-hidden backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all">
 
@@ -403,37 +403,37 @@ export default function TeacherDashboard() {
               <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Title</label>
-                  <input 
-                    name="title" 
-                    placeholder="e.g. Advanced Mathematics v2" 
-                    value={form.title} 
-                    onChange={handleChange} 
-                    required 
-                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" 
+                  <input
+                    name="title"
+                    placeholder="e.g. Advanced Mathematics v2"
+                    value={form.title}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
                   />
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Subject</label>
-                  <input 
-                    name="subject" 
-                    placeholder="e.g. Mathematics" 
-                    value={form.subject} 
-                    onChange={handleChange} 
-                    required 
-                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" 
+                  <input
+                    name="subject"
+                    placeholder="e.g. Mathematics"
+                    value={form.subject}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
                   />
                 </motion.div>
 
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="space-y-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Description</label>
-                  <textarea 
-                    name="description" 
-                    placeholder="Provide a brief overview..." 
-                    value={form.description} 
-                    onChange={handleChange} 
-                    rows={3} 
-                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium resize-none text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]" 
+                  <textarea
+                    name="description"
+                    placeholder="Provide a brief overview..."
+                    value={form.description}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium resize-none text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
                   />
                 </motion.div>
 
@@ -462,11 +462,11 @@ export default function TeacherDashboard() {
                   </div>
                 </motion.div>
 
-                <motion.button 
-                  initial={{ opacity: 0 }} 
-                  animate={{ opacity: 1 }} 
-                  transition={{ delay: 0.5 }} 
-                  disabled={loading} 
+                <motion.button
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  disabled={loading}
                   className="w-full relative mt-2 group/btn inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-200 text-[#03050C] px-8 py-4.5 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-70 disabled:pointer-events-none text-sm"
                 >
                   <span className="relative flex items-center gap-2">
@@ -478,12 +478,12 @@ export default function TeacherDashboard() {
             </div>
           </motion.div>
 
-          {/* FILES LIST AREA - Full width on mobile, 8 cols on desktop */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            transition={{ duration: 0.5, type: 'spring' }} 
-            className="lg:col-span-8"
+          {/* FILES LIST AREA - Full width on mobile, 7 cols on tablet, 8 on desktop */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, type: 'spring' }}
+            className="md:col-span-7 lg:col-span-8 w-full"
           >
 
             {/* Library Header - Responsive */}
@@ -570,28 +570,28 @@ export default function TeacherDashboard() {
 
                       <div className="mt-auto flex flex-col gap-2 pt-5 border-t border-white/5 z-10 relative">
                         <div className="grid grid-cols-2 gap-2">
-                          <button 
-                            onClick={() => handleOpen(file._id, file.title)} 
+                          <button
+                            onClick={() => handleOpen(file._id, file.title)}
                             className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-[#12182b] hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 border border-transparent hover:border-white/10"
                           >
                             <Eye size={14} /> View
                           </button>
-                          <button 
-                            onClick={() => handleDownload(file._id)} 
+                          <button
+                            onClick={() => handleDownload(file._id)}
                             className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-[#12182b] hover:bg-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 border border-transparent hover:border-white/10"
                           >
                             <Download size={14} /> Download
                           </button>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
-                          <button 
-                            onClick={() => navigate(`/files/${file._id}/summary`)} 
+                          <button
+                            onClick={() => navigate(`/files/${file._id}/summary`)}
                             className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 group/ai"
                           >
                             <Brain size={14} className="text-indigo-400 group-hover/ai:text-indigo-300" /> Summary
                           </button>
-                          <button 
-                            onClick={() => navigate(`/files/${file._id}/quiz`)} 
+                          <button
+                            onClick={() => navigate(`/files/${file._id}/quiz`)}
                             className="flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-300 hover:text-white text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 group/ai"
                           >
                             <MessageSquare size={14} className="text-purple-400 group-hover/ai:text-purple-300" /> Quiz
@@ -601,9 +601,9 @@ export default function TeacherDashboard() {
 
                       {view === "my" && (
                         <div className="absolute top-4 right-4 z-20">
-                          <button 
-                            onClick={() => handleDelete(file._id)} 
-                            className="p-2.5 sm:p-3 rounded-xl bg-red-500/10 text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-500 hover:text-white border border-red-500/20 shadow-lg hover:scale-110 active:scale-95" 
+                          <button
+                            onClick={() => handleDelete(file._id)}
+                            className="p-2.5 sm:p-3 rounded-xl bg-red-500/10 text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-500 hover:text-white border border-red-500/20 shadow-lg hover:scale-110 active:scale-95"
                             title="Permanently Delete"
                           >
                             <Trash2 size={16} />
