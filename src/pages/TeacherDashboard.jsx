@@ -385,77 +385,77 @@ export default function TeacherDashboard() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, type: 'spring' }}
-            className="md:col-span-5 lg:col-span-4 space-y-6 w-full max-w-md mx-auto md:max-w-none"
+            className="md:col-span-5 lg:col-span-4 space-y-5 sm:space-y-6 w-full max-w-[360px] sm:max-w-md mx-auto md:max-w-none"
           >
-            <div className="lg:sticky lg:top-24 bg-[#080d1a]/80 border border-white/10 rounded-[2rem] p-6 sm:p-8 relative overflow-hidden backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all">
+            <div className="lg:sticky lg:top-24 bg-[#080d1a]/80 border border-white/10 rounded-3xl sm:rounded-[2rem] p-5 sm:p-8 relative overflow-hidden backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all">
 
               {/* Neat header from screenshot */}
-              <div className="flex items-center gap-4 mb-8 relative z-10">
-                <div className="w-14 h-14 bg-[#12182b] rounded-2xl flex items-center justify-center border border-white/5 shadow-inner">
-                  <CloudUpload className="text-indigo-300" size={24} />
+              <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8 relative z-10">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#12182b] rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/5 shadow-inner shrink-0">
+                  <CloudUpload className="text-indigo-300 w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white tracking-tight">Upload Material</h2>
-                  <p className="text-xs text-slate-400 font-medium mt-1">Add new content to library</p>
+                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">Upload Material</h2>
+                  <p className="text-[10px] sm:text-xs text-slate-400 font-medium mt-0.5 sm:mt-1">Add new content to library</p>
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-2">
-                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Title</label>
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 relative z-10">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-1.5 sm:space-y-2">
+                  <label className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Title</label>
                   <input
                     name="title"
                     placeholder="e.g. Advanced Mathematics v2"
                     value={form.title}
                     onChange={handleChange}
                     required
-                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-3.5 py-3 sm:px-4 sm:py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-xs sm:text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
                   />
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-2">
-                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Subject</label>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-1.5 sm:space-y-2">
+                  <label className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Subject</label>
                   <input
                     name="subject"
                     placeholder="e.g. Mathematics"
                     value={form.subject}
                     onChange={handleChange}
                     required
-                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-3.5 py-3 sm:px-4 sm:py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium text-xs sm:text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
                   />
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="space-y-2">
-                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Description</label>
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="space-y-1.5 sm:space-y-2">
+                  <label className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Description</label>
                   <textarea
                     name="description"
                     placeholder="Provide a brief overview..."
                     value={form.description}
                     onChange={handleChange}
                     rows={3}
-                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-4 py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium resize-none text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
+                    className="w-full bg-[#0a0f1c] border border-white/5 rounded-xl px-3.5 py-3 sm:px-4 sm:py-4 text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:bg-[#0a0f1c] focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium resize-none text-xs sm:text-sm shadow-[inset_0_2px_10px_rgba(0,0,0,0.3)]"
                   />
                 </motion.div>
 
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="pt-2">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="pt-1 sm:pt-2">
                   <div
                     onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                     onDragLeave={() => setDragActive(false)}
                     onDrop={handleDrop}
-                    className={`relative overflow-hidden border-2 rounded-3xl p-8 text-center cursor-pointer transition-all duration-300 group/drop
+                    className={`relative overflow-hidden border-2 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center cursor-pointer transition-all duration-300 group/drop
                         ${dragActive ? "border-indigo-500 border-solid bg-indigo-500/10 scale-[1.02] shadow-[0_0_30px_rgba(99,102,241,0.2)]" : "border-slate-700/50 border-dashed bg-[#0a0f1c] hover:border-indigo-500/50 hover:bg-[#12182b]"}`}
                   >
                     {dragActive && <div className="absolute inset-0 bg-indigo-500/5 animate-pulse"></div>}
 
                     <input type="file" name="file" onChange={handleChange} className="hidden" id="fileUpload" />
-                    <label htmlFor="fileUpload" className="block cursor-pointer flex flex-col items-center justify-center w-full h-full relative z-10 py-2">
-                      <motion.div animate={{ y: dragActive ? -5 : 0 }} className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${dragActive ? 'bg-indigo-500/20 text-indigo-400' : 'bg-[#1e2336] text-slate-400 group-hover/drop:bg-[#252a40] group-hover/drop:text-slate-300'}`}>
-                        <CloudUpload size={28} />
+                    <label htmlFor="fileUpload" className="block cursor-pointer flex flex-col items-center justify-center w-full h-full relative z-10 py-1 sm:py-2">
+                      <motion.div animate={{ y: dragActive ? -5 : 0 }} className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 transition-all duration-300 ${dragActive ? 'bg-indigo-500/20 text-indigo-400' : 'bg-[#1e2336] text-slate-400 group-hover/drop:bg-[#252a40] group-hover/drop:text-slate-300'}`}>
+                        <CloudUpload className="w-6 h-6 sm:w-7 sm:h-7" />
                       </motion.div>
-                      <p className="text-sm font-bold text-white mb-1 tracking-wide">
+                      <p className="text-xs sm:text-sm font-bold text-white mb-1 tracking-wide">
                         {form.file ? <span className="text-indigo-400">{form.file.name}</span> : "Click to browse or drag file"}
                       </p>
-                      <p className="text-xs font-medium text-slate-500 mt-2">
+                      <p className="text-[10px] sm:text-xs font-medium text-slate-500 mt-1 sm:mt-2">
                         {form.file ? "File ready to upload" : "Max file size: 50MB"}
                       </p>
                     </label>
@@ -467,10 +467,10 @@ export default function TeacherDashboard() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
                   disabled={loading}
-                  className="w-full relative mt-2 group/btn inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-200 text-[#03050C] px-8 py-4.5 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-70 disabled:pointer-events-none text-sm"
+                  className="w-full relative mt-1 sm:mt-2 group/btn inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-200 text-[#03050C] px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] disabled:opacity-70 disabled:pointer-events-none text-xs sm:text-sm"
                 >
                   <span className="relative flex items-center gap-2">
-                    {loading ? <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" /> : <UploadCloud size={18} />}
+                    {loading ? <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" /> : <UploadCloud className="w-[18px] h-[18px]" />}
                     {loading ? "UPLOADING..." : "UPLOAD"}
                   </span>
                 </motion.button>
