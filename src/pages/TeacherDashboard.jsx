@@ -186,38 +186,32 @@ export default function TeacherDashboard() {
   };
 
   const handleOpen = async (fileId, fileName) => {
-    try {
-      const res = await api.get(`/files/download/${fileId}`, { responseType: "blob" });
-      const pdfBlob = new Blob([res.data], { type: "application/pdf" });
-      const pdfUrl = URL.createObjectURL(pdfBlob);
+  try {
+    const res = await api.get(`/files/download/${fileId}`, {
+      responseType: "blob",
+    });
 
-      const html = `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>${fileName || "Study Material"}</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-              html, body { margin: 0; height: 100%; background-color: #0a0c10; }
-              iframe { width: 100%; height: 100%; border: none; }
-            </style>
-          </head>
-          <body><iframe src="${pdfUrl}"></iframe></body>
-        </html>
-      `;
-      const htmlBlob = new Blob([html], { type: "text/html" });
-      const htmlUrl = URL.createObjectURL(htmlBlob);
-      window.open(htmlUrl, "_blank");
+    const pdfBlob = new Blob([res.data], { type: "application/pdf" });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
 
-      setTimeout(() => {
-        URL.revokeObjectURL(pdfUrl);
-        URL.revokeObjectURL(htmlUrl);
-      }, 15000);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to open file");
+    // open pdf directly
+    const newTab = window.open(pdfUrl, "_blank");
+
+    // fallback if popup blocked
+    if (!newTab) {
+      window.location.href = pdfUrl;
     }
-  };
+
+    // revoke memory after some time
+    setTimeout(() => {
+      URL.revokeObjectURL(pdfUrl);
+    }, 60000);
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to open file");
+  }
+};
 
   const handleLogout = () => {
     logoutUser();
