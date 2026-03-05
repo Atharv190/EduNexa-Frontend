@@ -40,6 +40,7 @@ export default function TeacherDashboard() {
 
   const [files, setFiles] = useState([]);
   const [filteredFiles, setFilteredFiles] = useState([]);
+  const [openingFile, setOpeningFile] = useState(false);
   const [globalFilesCount, setGlobalFilesCount] = useState(0);
   const [myFilesCount, setMyFilesCount] = useState(0);
 
@@ -185,18 +186,24 @@ export default function TeacherDashboard() {
     }
   };
 
-  const handleOpen = async (fileId, fileName) => {
+  const handleOpen = async (fileId) => {
   try {
+    setOpeningFile(true); // show popup
+
     const res = await api.get(`/files/download/${fileId}`, {
       responseType: "blob",
     });
 
     const pdfBlob = new Blob([res.data], { type: "application/pdf" });
     const pdfUrl = URL.createObjectURL(pdfBlob);
+
     const newTab = window.open(pdfUrl, "_blank");
+
     if (!newTab) {
       window.location.href = pdfUrl;
     }
+
+    setOpeningFile(false); // hide popup
 
     setTimeout(() => {
       URL.revokeObjectURL(pdfUrl);
@@ -205,6 +212,7 @@ export default function TeacherDashboard() {
   } catch (err) {
     console.error(err);
     alert("Failed to open file");
+    setOpeningFile(false);
   }
 };
 
@@ -239,7 +247,22 @@ export default function TeacherDashboard() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#0a0c10] via-[#0f1219] to-[#1a1f2c] text-slate-200 overflow-x-hidden font-sans selection:bg-indigo-500/40 selection:text-white">
+      {openingFile && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[100]">
+    <div className="bg-[#0f1219] px-6 py-5 rounded-xl text-center border border-white/10 max-w-xs w-full">
+      <p className="text-white text-lg font-semibold">
+        📂 Opening file...
+      </p>
+      <p className="text-slate-400 text-sm mt-2">
+        Please wait while your material loads
+      </p>
 
+      <div className="mt-4 flex justify-center">
+        <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    </div>
+  </div>
+)}
       <div className="fixed inset-0 z-0 pointer-events-none">
         
         <div className="absolute top-0 -left-40 w-[500px] h-[500px] bg-purple-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
