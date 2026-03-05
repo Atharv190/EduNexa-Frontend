@@ -18,7 +18,6 @@ export default function FileCard({ file }) {
           View
         </Link>
 
-        {/* ✅ AUTO DOWNLOAD – ORIGINAL FILE (PDF stays PDF) */}
         <a
           href={`${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/files/download/${file._id}`}
           className="text-sm bg-gray-100 px-2 py-1 rounded hover:bg-gray-200"

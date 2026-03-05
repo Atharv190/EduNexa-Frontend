@@ -1,4 +1,3 @@
-// src/pages/Quiz.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
@@ -14,7 +13,6 @@ export default function Quiz() {
   const [showAnswer, setShowAnswer] = useState({});
   const [score, setScore] = useState({ correct: 0, total: 0 });
 
-  /* ================= FETCH QUIZ ================= */
   useEffect(() => {
     (async () => {
       try {
@@ -28,7 +26,6 @@ export default function Quiz() {
     })();
   }, [fileId]);
 
-  /* ================= CALCULATE SCORE ================= */
   useEffect(() => {
     if (quiz.length > 0) {
       let correct = 0;
@@ -44,7 +41,6 @@ export default function Quiz() {
     }
   }, [showAnswer, selected, quiz]);
 
-  /* ================= LOADING STATE ================= */
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-slate-400 text-lg">
@@ -53,7 +49,6 @@ export default function Quiz() {
     );
   }
 
-  /* ================= NO QUIZ STATE ================= */
   if (!quiz.length) {
     return (
       <div className="min-h-screen flex items-center justify-center text-slate-400">
@@ -62,15 +57,14 @@ export default function Quiz() {
     );
   }
 
-  /* ================= CHECK IF ALL QUESTIONS ANSWERED ================= */
   const allAnswered = Object.keys(showAnswer).length === quiz.length;
 
-  /* ================= UI ================= */
+
   return (
     <div className="min-h-screen bg-[#020617] py-10 px-4">
       <div className="max-w-3xl mx-auto">
         
-        {/* Back Button */}
+       
         <button
           onClick={() => navigate(-1)}
           className="group flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-indigo-400 transition-colors mb-4"
@@ -85,7 +79,7 @@ export default function Quiz() {
             📝 Quiz Based on Material
           </h1>
 
-          {/* Questions */}
+         
           {quiz.map((q, index) => {
             const questionId = index;
 
@@ -94,17 +88,15 @@ export default function Quiz() {
                 key={index}
                 className="mb-8 p-6 rounded-2xl bg-white/5 border border-white/10"
               >
-                {/* Question */}
+               
                 <h2 className="text-lg font-semibold mb-4 text-white">
                   {index + 1}. {q.question}
                 </h2>
 
-                {/* Options */}
                 <div className="space-y-3">
                   {q.options.map((opt, optIndex) => {
                     const optionLetter = ["A", "B", "C", "D"][optIndex];
 
-                    // ✅ Remove existing labels like "A) "
                     const cleanOption = opt.replace(/^[A-D]\)\s*/i, "");
 
                     const isSelected = selected[questionId] === optionLetter;
@@ -150,7 +142,6 @@ export default function Quiz() {
                   })}
                 </div>
 
-                {/* Correct Answer */}
                 {showAnswer[questionId] && (
                   <p className="mt-4 font-semibold text-emerald-400">
                     ✅ Correct Answer: {q.answer}
@@ -160,13 +151,11 @@ export default function Quiz() {
             );
           })}
 
-          {/* SCORE SECTION - Only shown at the end */}
           {allAnswered && (
             <div className="mt-8 p-6 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/30 rounded-2xl">
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-white mb-3">🎯 Your Score</h2>
                 
-                {/* Score Circle */}
                 <div className="relative w-32 h-32 mx-auto mb-4">
                   <svg className="w-full h-full transform -rotate-90">
                     <circle
@@ -203,7 +192,6 @@ export default function Quiz() {
                   </div>
                 </div>
 
-                {/* Score Details */}
                 <div className="flex items-center justify-center gap-8 mb-4">
                   <div className="text-center">
                     <div className="text-2xl font-bold text-emerald-400">{score.correct}</div>
@@ -215,7 +203,6 @@ export default function Quiz() {
                   </div>
                 </div>
 
-                {/* Percentage */}
                 <div className="text-lg">
                   <span className="text-4xl font-black text-white">
                     {Math.round((score.correct / score.total) * 100)}%
@@ -223,7 +210,6 @@ export default function Quiz() {
                   <span className="text-slate-400 ml-2">Score</span>
                 </div>
 
-                {/* Message based on score */}
                 <div className="mt-4 text-sm text-slate-400">
                   {score.correct === score.total ? (
                     <span className="text-emerald-400">🏆 Perfect score! Excellent work!</span>
@@ -237,7 +223,6 @@ export default function Quiz() {
             </div>
           )}
 
-          {/* Footer */}
           <div className="text-center mt-6 text-slate-400">
             {allAnswered ? "Quiz completed! 🎉" : "Keep going... 📝"}
           </div>

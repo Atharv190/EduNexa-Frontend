@@ -43,7 +43,6 @@ export default function StudentDashboard() {
   const API_BASE =
     process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
-  /* ================= FETCH FILES ================= */
   useEffect(() => {
     (async () => {
       try {
@@ -61,13 +60,11 @@ export default function StudentDashboard() {
     return null;
   }
 
-  /* ================= LOGOUT ================= */
   const handleLogout = () => {
     logoutUser();
     navigate("/", { replace: true });
   };
 
-  /* ================= DELETE ACCOUNT ================= */
   const handleDeleteAccount = async () => {
     if (!deletePassword) return alert("Enter password");
 
@@ -87,9 +84,8 @@ export default function StudentDashboard() {
   return (
     <div className="relative min-h-screen bg-[#03050C] text-slate-200 overflow-x-hidden font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
 
-      {/* ===== BACKGROUND GRID & GLOW ===== */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Animated glowing orbs */}
+       
         <motion.div
           variants={floatingOrb}
           animate="animate"
@@ -102,11 +98,9 @@ export default function StudentDashboard() {
           className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full bg-purple-600/10 blur-[150px] mix-blend-screen pointer-events-none"
         />
 
-        {/* Premium subtle grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000_80%,transparent_100%)]" />
       </div>
 
-      {/* ================= NAVBAR ================= */}
       <nav className="sticky top-0 z-40 bg-[#03050C]/60 backdrop-blur-xl border-b border-white/5 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex justify-between items-center relative">
           <div className="flex items-center gap-3 group cursor-pointer z-50">
@@ -135,7 +129,6 @@ export default function StudentDashboard() {
             </button>
           </div>
 
-          {/* Mobile Hamburguer Menu Button */}
           <button
             className="sm:hidden p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors z-50 focus:outline-none"
             onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -153,11 +146,9 @@ export default function StudentDashboard() {
             </AnimatePresence>
           </button>
 
-          {/* Mobile Navigation Overlay */}
           <AnimatePresence>
             {showMobileMenu && (
               <>
-                {/* Backdrop */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -166,7 +157,6 @@ export default function StudentDashboard() {
                   onClick={() => setShowMobileMenu(false)}
                 />
 
-                {/* Menu Card */}
                 <motion.div
                   initial={{ opacity: 0, y: -10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -208,10 +198,8 @@ export default function StudentDashboard() {
         </div>
       </nav>
 
-      {/* ================= MAIN ================= */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-20 relative z-10 transition-all duration-300">
 
-        {/* ================= HERO ================= */}
         <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -279,7 +267,6 @@ export default function StudentDashboard() {
           </motion.div>
         </div>
 
-        {/* ================= QUICK ACTIONS ================= */}
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -334,7 +321,6 @@ export default function StudentDashboard() {
           </div>
         </div>
 
-        {/* ================= RECENT MATERIALS ================= */}
         <section className="mb-8">
           <div className="flex flex-row justify-between items-center sm:items-end mb-6 sm:mb-8">
             <div className="flex items-center gap-3">
@@ -416,7 +402,6 @@ export default function StudentDashboard() {
         </section>
       </main>
 
-      {/* ================= PROFILE MODAL ================= */}
       <AnimatePresence>
         {showProfile && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

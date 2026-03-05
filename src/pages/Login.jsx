@@ -39,17 +39,14 @@ export default function Login() {
   return (
     <div className="min-h-[100dvh] w-full flex bg-[#03050C] font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-x-hidden">
 
-      {/* LEFT SIDE - VISUAL Showcase (Hidden on Mobile) */}
       <div className="hidden lg:flex relative w-1/2 items-center justify-center p-12 overflow-hidden border-r border-white/5">
 
-        {/* Abstract Background Elements */}
         <div className="absolute inset-0 z-0">
-          {/* Deep dark base */}
+       
           <div className="absolute inset-0 bg-[#03050C]" />
-          {/* Grid */}
+          
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_20%,transparent_100%)]" />
 
-          {/* Animated glowing orbs */}
           <motion.div
             animate={{ y: [0, -40, 0], scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
@@ -67,7 +64,6 @@ export default function Login() {
           />
         </div>
 
-        {/* Floating Showcase Card */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,11 +100,8 @@ export default function Login() {
           </div>
         </motion.div>
       </div>
-
-      {/* RIGHT SIDE - LOGIN FORM */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative z-10 bg-[#03050C] lg:overflow-y-auto">
 
-        {/* Subtle mobile background glow */}
         <div className="lg:hidden absolute top-0 left-0 w-full h-96 bg-indigo-600/10 blur-[100px] pointer-events-none" />
 
         <div className="w-full max-w-[420px] relative z-10">
@@ -130,7 +123,6 @@ export default function Login() {
               Enter your credentials to access your account.
             </p>
 
-            {/* Error */}
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
@@ -143,7 +135,6 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
 
-              {/* Email */}
               <div className="space-y-1.5">
                 <label className="text-sm font-semibold text-slate-300 ml-1">Email Address</label>
                 <div className="relative group/input">
@@ -161,7 +152,6 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Password */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between ml-1">
                   <label className="text-sm font-semibold text-slate-300">Password</label>
@@ -184,7 +174,7 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Submit */}
+             
               <button
                 type="submit"
                 disabled={loading}
@@ -197,7 +187,7 @@ export default function Login() {
               </button>
             </form>
 
-            {/* Footer */}
+            
             <p className="mt-8 text-sm text-center text-slate-400 font-medium">
               New to EduNexa?{" "}
               <Link to="/signup" className="text-white hover:text-indigo-400 transition-colors font-bold">

@@ -41,7 +41,6 @@ export default function Summary() {
     }
   };
 
-  /* ================= STATES ================= */
 
   if (loading) {
     return (
@@ -59,13 +58,11 @@ export default function Summary() {
     );
   }
 
-  /* ================= UI ================= */
 
   return (
     <div className="min-h-screen bg-[#020617] py-10 px-4">
       <div className="max-w-5xl mx-auto bg-white/5 border border-white/10 rounded-3xl shadow-2xl shadow-indigo-500/10 p-8 space-y-10">
 
-        {/* 🔙 BACK */}
         <button
           onClick={handleBack}
           className="flex items-center gap-2 text-sm font-semibold text-slate-400 hover:text-indigo-400 transition"
@@ -74,7 +71,6 @@ export default function Summary() {
           Back to Dashboard
         </button>
 
-        {/* 🧠 TITLE */}
         <div className="text-center">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600/20 text-indigo-400 mb-4">
             <Sparkles size={26} />
@@ -87,7 +83,6 @@ export default function Summary() {
           </p>
         </div>
 
-        {/* 📄 OVERVIEW */}
         <Section
           icon={<BookOpen size={20} />}
           title="Overview"
@@ -97,7 +92,6 @@ export default function Summary() {
           </p>
         </Section>
 
-        {/* 🔑 KEY POINTS */}
         {summary.keyPoints?.length > 0 && (
           <Section
             icon={<CheckCircle size={20} />}
@@ -114,7 +108,6 @@ export default function Summary() {
           </Section>
         )}
 
-        {/* 🏷 IMPORTANT TERMS */}
         {summary.importantTerms?.length > 0 && (
           <Section
             icon={<Tag size={20} />}
@@ -133,7 +126,6 @@ export default function Summary() {
           </Section>
         )}
 
-        {/* ✅ CONCLUSION */}
         {summary.conclusion && (
           <Section
             icon={<Sparkles size={20} />}
@@ -145,7 +137,6 @@ export default function Summary() {
           </Section>
         )}
 
-        {/* 🚀 FOOTER CTA */}
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-slate-400 text-sm">
             Generated using AI • Review before exams 📚
@@ -164,8 +155,6 @@ export default function Summary() {
     </div>
   );
 }
-
-/* ================= REUSABLE SECTION ================= */
 
 function Section({ icon, title, children }) {
   return (

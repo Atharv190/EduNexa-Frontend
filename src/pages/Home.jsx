@@ -13,7 +13,6 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/outline";
 
-// --- Animation Variants ---
 const staggerContainer = {
   hidden: { opacity: 0 },
   show: {
@@ -43,7 +42,6 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Add scroll listener for navbar blur effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 15);
@@ -55,9 +53,8 @@ export default function Home() {
   return (
     <div className="relative min-h-screen bg-[#03050C] text-slate-200 overflow-x-hidden font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
 
-      {/* ===== BACKGROUND GRID & GLOW ===== */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Animated glowing orbs */}
+        
         <motion.div
           variants={floatingOrb}
           animate="animate"
@@ -70,11 +67,9 @@ export default function Home() {
           className="absolute bottom-[20%] right-[-10%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] rounded-full bg-fuchsia-600/10 blur-[150px] mix-blend-screen pointer-events-none"
         />
 
-        {/* Premium subtle grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000_80%,transparent_100%)]" />
       </div>
 
-      {/* ================= NAVBAR ================= */}
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -85,7 +80,7 @@ export default function Home() {
           }`}
       >
         <nav className="relative h-12 flex items-center justify-between px-2">
-          {/* Logo */}
+          
           <Link to="/" className="flex items-center gap-3 group relative z-50">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 flex items-center justify-center border border-white/10 group-hover:border-indigo-500/40 transition-all duration-300 shadow-[0_0_15px_rgba(99,102,241,0.15)] group-hover:shadow-[0_0_25px_rgba(99,102,241,0.3)]">
               <Sparkles className="w-5 h-5 text-indigo-400 group-hover:text-fuchsia-400 transition-colors" />
@@ -95,7 +90,6 @@ export default function Home() {
             </span>
           </Link>
 
-          {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/5">
             <Link
               to="/signup"
@@ -122,7 +116,6 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden relative z-50 p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors focus:outline-none"
@@ -141,11 +134,9 @@ export default function Home() {
           </button>
         </nav>
 
-        {/* Mobile Menu Dropdown */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <>
-              {/* Backdrop */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -153,7 +144,6 @@ export default function Home() {
                 className="fixed inset-0 top-[4rem] sm:top-[5rem] -mx-4 sm:-mx-6 z-40 bg-[#03050C]/60 backdrop-blur-md md:hidden min-h-screen"
                 onClick={() => setMobileMenuOpen(false)}
               />
-              {/* Menu Card */}
               <motion.div
                 initial={{ opacity: 0, y: -10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -206,7 +196,6 @@ export default function Home() {
       </motion.header>
 
       <main className="pt-16 md:pt-20">
-        {/* ================= HERO ================= */}
         <section className="relative z-10 pt-8 pb-10 sm:pt-12 sm:pb-16 md:pt-16 md:pb-20 px-4 sm:px-6 text-center">
           <motion.div
             variants={staggerContainer}
@@ -257,7 +246,6 @@ export default function Home() {
               </Link>
             </motion.div>
 
-            {/* Social Proof metrics */}
             <motion.div variants={fadeUp} className="mt-12 sm:mt-16 pt-6 border-t border-white/10 w-full max-w-3xl flex flex-wrap justify-center gap-6 sm:gap-14">
               {[
                 { label: "Active Students", value: "50k+" },
@@ -273,7 +261,6 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* ================= FEATURES ================= */}
         <section id="features" className="relative z-10 py-12 sm:py-16 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div
@@ -317,9 +304,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= USERS SECTION ================= */}
         <section className="relative z-10 py-14 sm:py-20 px-4 sm:px-6 bg-white/[0.02] border-y border-white/5 relative overflow-hidden">
-          {/* Subtle decoration inside users section */}
+        
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
 
           <div className="max-w-5xl mx-auto relative z-10">
@@ -372,7 +358,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= CTA ================= */}
         <section className="relative z-10 py-12 sm:py-20 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto relative group">
             <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-[2rem] sm:rounded-[2.5rem] blur-lg sm:blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-700" />
@@ -403,7 +388,6 @@ export default function Home() {
         </section>
       </main>
 
-      {/* ================= FOOTER ================= */}
       <footer className="relative z-10 border-t border-white/10 bg-[#03050C] py-6 sm:py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -428,10 +412,7 @@ export default function Home() {
   );
 }
 
-/* ================= COMPONENTS ================= */
-
 function FeatureCard({ icon, title, desc, color, delay }) {
-  // Determine gradient colors based on prop
   const colorMap = {
     indigo: "from-indigo-500/20 to-indigo-500/5 text-indigo-400 border-indigo-500/20 group-hover:border-indigo-500/50",
     fuchsia: "from-fuchsia-500/20 to-fuchsia-500/5 text-fuchsia-400 border-fuchsia-500/20 group-hover:border-fuchsia-500/50",

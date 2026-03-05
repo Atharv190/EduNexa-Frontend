@@ -91,13 +91,11 @@ export default function Files() {
   return (
     <div className="min-h-screen bg-[#07090f] text-slate-200 font-sans selection:bg-indigo-500/30 overflow-x-hidden pb-12">
 
-      {/* ================= BACKGROUND EFFECTS ================= */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/10 via-[#07090f] to-[#07090f]">
         <div className="absolute top-[5%] left-[-15%] w-[60vw] h-[60vw] max-w-[600px] max-h-[600px] bg-indigo-600/10 blur-[120px] rounded-full mix-blend-screen" />
         <div className="absolute bottom-[-10%] right-[10%] w-[50vw] h-[50vw] max-w-[500px] max-h-[500px] bg-fuchsia-600/5 blur-[100px] rounded-full mix-blend-screen" />
       </div>
 
-      {/* ================= TOP HEADER ================= */}
       <header className="sticky top-0 z-30 bg-[#07090f]/80 backdrop-blur-xl border-b border-white/5 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
 
@@ -143,7 +141,6 @@ export default function Files() {
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
         <div className="md:hidden px-4 pb-4">
           <div className="flex items-center px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 focus-within:border-indigo-500/50 transition-all w-full">
             <Search size={18} className="text-slate-400 mr-3" />
@@ -158,10 +155,8 @@ export default function Files() {
         </div>
       </header>
 
-      {/* ================= CONTENT ================= */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10">
 
-        {/* ===== LOADING ===== */}
         {loading && (
           <div className="flex flex-col items-center justify-center h-64 sm:h-80 opacity-70">
             <div className="w-12 h-12 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
@@ -169,7 +164,6 @@ export default function Files() {
           </div>
         )}
 
-        {/* ===== EMPTY STATE ===== */}
         {!loading && files.length === 0 && (
           <div className="bg-[#181d2b] border border-dashed border-white/10 rounded-[2rem] p-12 sm:p-20 text-center relative overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-indigo-500/10 blur-[50px] rounded-full"></div>
@@ -185,7 +179,6 @@ export default function Files() {
           </div>
         )}
 
-        {/* ===== NO SEARCH RESULTS ===== */}
         {!loading && files.length > 0 && filteredFiles.length === 0 && (
           <div className="text-center py-20">
             <Search size={48} className="text-slate-600 mx-auto mb-4" />
@@ -200,7 +193,6 @@ export default function Files() {
           </div>
         )}
 
-        {/* ===== FILES GRID ===== */}
         {!loading && files.length > 0 && filteredFiles.length > 0 && (
           <>
             <div className="flex justify-between items-end mb-6 sm:mb-8">
@@ -224,18 +216,15 @@ export default function Files() {
                     className={`group rounded-[1.5rem] bg-[#0c101a] border border-white/5 transition-all duration-300 sm:hover:-translate-y-1 flex flex-col h-full relative overflow-hidden ${c.borderHover} ${c.bgHover} ${c.shadow}`}
                     style={{ animationDelay: `${i * 50}ms`, animationFillMode: 'both' }}
                   >
-                    {/* Decorative Gradient */}
                     <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${c.gradient} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
 
                     <div className="p-6 flex-1 flex flex-col">
-                      {/* Header Row */}
                       <div className="flex justify-between items-start mb-5">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center bg-white/5 border border-white/5 transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg ${c.iconBgParams}`}>
                           <FileText size={24} />
                         </div>
                       </div>
 
-                      {/* Content */}
                       <div>
                         <span className={`inline-block mb-3 px-2.5 py-1 rounded-md border text-[10px] sm:text-xs font-bold tracking-wider uppercase ${c.badge}`}>
                           {f.subject || "GENERAL"}
@@ -253,7 +242,6 @@ export default function Files() {
                       </div>
                     </div>
 
-                    {/* Actions Footer */}
                     <div className="px-6 py-4 border-t border-white/5 bg-black/20 flex items-center justify-between gap-3 relative z-10 transition-colors">
                       <Link
                         to={`/files/${f._id}`}
@@ -262,7 +250,6 @@ export default function Files() {
                         View
                       </Link>
 
-                      {/* ✅ BACKEND DOWNLOAD */}
                       <a
                         href={`${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/files/download/${f._id}`}
                         className={`flex items-center justify-center gap-1.5 py-2 px-4 text-sm font-bold rounded-xl transition-all border group/dl ${c.btnBg}`}
@@ -272,7 +259,6 @@ export default function Files() {
                       </a>
                     </div>
 
-                    {/* Internal Glow Effect */}
                     <div className={`absolute -bottom-10 -right-10 w-32 h-32 blur-[40px] rounded-full transition-colors duration-500 pointer-events-none opacity-0 group-hover:opacity-100 ${c.glow}`}></div>
                   </div>
                 )

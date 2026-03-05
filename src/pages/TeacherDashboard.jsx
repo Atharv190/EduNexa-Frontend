@@ -193,16 +193,11 @@ export default function TeacherDashboard() {
 
     const pdfBlob = new Blob([res.data], { type: "application/pdf" });
     const pdfUrl = URL.createObjectURL(pdfBlob);
-
-    // open pdf directly
     const newTab = window.open(pdfUrl, "_blank");
-
-    // fallback if popup blocked
     if (!newTab) {
       window.location.href = pdfUrl;
     }
 
-    // revoke memory after some time
     setTimeout(() => {
       URL.revokeObjectURL(pdfUrl);
     }, 60000);
@@ -218,7 +213,6 @@ export default function TeacherDashboard() {
     navigate("/");
   };
 
-  // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (isMobileMenuOpen && !e.target.closest('.mobile-menu-container')) {
@@ -229,7 +223,6 @@ export default function TeacherDashboard() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMobileMenuOpen]);
 
-  // Close mobile menu when window resizes to desktop
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -242,23 +235,20 @@ export default function TeacherDashboard() {
 
   if (!user) return null;
 
-  // Get user's display name
   const displayName = user.username || user.name || user.email?.split('@')[0] || "Teacher";
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#0a0c10] via-[#0f1219] to-[#1a1f2c] text-slate-200 overflow-x-hidden font-sans selection:bg-indigo-500/40 selection:text-white">
 
-      {/* NEW BACKGROUND: Subtle gradient with floating particles */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Animated gradient orbs */}
+        
         <div className="absolute top-0 -left-40 w-[500px] h-[500px] bg-purple-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
         <div className="absolute top-0 -right-40 w-[500px] h-[500px] bg-indigo-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-40 left-20 w-[500px] h-[500px] bg-blue-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
         
-        {/* Grid overlay - Fixed the syntax error */}
+       
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h60v60H0z%22%20fill%3D%22none%22%20stroke%3D%22rgba(99%2C102%2C241%2C0.03)%22%20stroke-width%3D%220.5%22%2F%3E%3C%2Fsvg%3E')] opacity-20"></div>
-        
-        {/* Animated particles */}
+      
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
             <motion.div
@@ -282,10 +272,9 @@ export default function TeacherDashboard() {
         </div>
       </div>
 
-      {/* Floating Navbar - Responsive */}
       <nav className="sticky top-0 z-50 pt-2 sm:pt-4 px-3 sm:px-6 transition-all w-full">
         <div className="w-full max-w-5xl mx-auto h-[60px] sm:h-[72px] bg-[#1a1f2c]/90 backdrop-blur-xl border border-white/10 rounded-[16px] sm:rounded-[20px] flex justify-between items-center px-3 sm:px-5 shadow-lg relative z-50">
-          {/* Logo Section */}
+         
           <div className="flex items-center gap-1.5 sm:gap-3 group cursor-pointer z-50">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
               <Sparkles className="text-white w-3.5 h-3.5 sm:w-5 sm:h-5" />
@@ -294,9 +283,8 @@ export default function TeacherDashboard() {
             <span className="hidden xs:inline-flex px-2 sm:px-3 py-1 rounded-lg bg-indigo-500/20 text-[8px] sm:text-[10px] uppercase font-bold tracking-widest text-indigo-300 border border-indigo-500/30 ml-1 sm:ml-2">Teacher</span>
           </div>
 
-          {/* Desktop Menu - Hidden on mobile */}
           <div className="hidden lg:flex items-center gap-4">
-            {/* Global & Own Counts */}
+           
             <div className="flex items-center h-12 bg-[#0f1219] border border-white/10 rounded-xl px-5 gap-5 backdrop-blur-sm">
               <div className="flex items-center gap-3 border-r border-white/10 pr-5 h-full">
                 <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
@@ -314,7 +302,6 @@ export default function TeacherDashboard() {
               </div>
             </div>
 
-            {/* User Component */}
             <div className="flex items-center h-12 gap-3 px-4 rounded-xl bg-[#0f1219] border border-white/10 text-sm font-bold text-slate-200 backdrop-blur-sm">
               <div className="bg-gradient-to-br from-indigo-500/20 to-purple-600/20 p-1.5 rounded-lg flex items-center justify-center">
                 <User size={16} className="text-indigo-300" />
@@ -322,14 +309,12 @@ export default function TeacherDashboard() {
               <span className="tracking-wide text-[14px]">{displayName}</span>
             </div>
 
-            {/* Logout Button */}
             <button onClick={handleLogout} className="h-12 px-5 rounded-xl bg-[#0f1219] hover:bg-red-500/20 border border-white/10 transition-all flex items-center justify-center gap-2 text-[14px] font-bold text-slate-300 hover:text-red-400 group">
               <LogOut size={16} className="text-slate-400 group-hover:text-red-400" />
               <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
 
-          {/* Mobile Menu Toggle */}
           <button
             className="lg:hidden p-2 sm:p-2.5 rounded-xl bg-[#0f1219] border border-white/10 text-slate-300 flex items-center justify-center transition-all hover:bg-[#1a1f2c] relative z-50"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -339,11 +324,10 @@ export default function TeacherDashboard() {
           </button>
         </div>
 
-        {/* Mobile Menu Overlay - Improved responsive design */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>
-              {/* Backdrop */}
+              
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -353,7 +337,6 @@ export default function TeacherDashboard() {
                 onClick={() => setIsMobileMenuOpen(false)}
               />
 
-              {/* Menu Panel */}
               <motion.div
                 initial={{ opacity: 0, y: -20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -361,13 +344,10 @@ export default function TeacherDashboard() {
                 transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
                 className="absolute top-[68px] left-3 right-3 bg-[#1a1f2c]/95 backdrop-blur-2xl border border-white/10 rounded-[20px] p-4 shadow-2xl z-50 lg:hidden flex flex-col gap-3 origin-top mobile-menu-container max-w-md mx-auto"
               >
-                {/* Teacher Badge - Mobile */}
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Mobile Menu</span>
                   <span className="inline-flex px-2.5 py-1 rounded-lg bg-indigo-500/20 text-[9px] uppercase font-bold tracking-widest text-indigo-300 border border-indigo-500/30">Teacher</span>
                 </div>
-
-                {/* Mobile Stats - Enhanced for better visibility */}
                 <div className="flex flex-col gap-2 bg-[#0f1219] rounded-xl p-4 border border-white/10">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
@@ -386,7 +366,6 @@ export default function TeacherDashboard() {
                   </div>
                 </div>
 
-                {/* Mobile User Info - Enhanced */}
                 <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[#0f1219] to-[#1a1f2c] border border-white/10">
                   <div className="bg-gradient-to-br from-indigo-500/20 to-purple-600/20 p-2 rounded-lg flex items-center justify-center shadow-inner">
                     <User size={18} className="text-indigo-300" />
@@ -398,7 +377,6 @@ export default function TeacherDashboard() {
                   </div>
                 </div>
 
-                {/* Quick Actions - Mobile */}
                 <div className="grid grid-cols-2 gap-2 mt-1">
                   <button
                     onClick={() => {
@@ -430,7 +408,6 @@ export default function TeacherDashboard() {
                   </button>
                 </div>
 
-                {/* Mobile Logout - Enhanced */}
                 <button
                   onClick={handleLogout}
                   className="w-full py-3 mt-1 rounded-xl bg-gradient-to-r from-red-500/10 to-red-500/5 hover:from-red-500/20 hover:to-red-500/10 text-red-400 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:text-red-300 text-xs"
@@ -439,7 +416,6 @@ export default function TeacherDashboard() {
                   <span>Logout securely</span>
                 </button>
 
-                {/* Version Info */}
                 <div className="text-center mt-1">
                   <span className="text-[7px] text-slate-600">EduNexa Teacher v1.0</span>
                 </div>
@@ -451,7 +427,6 @@ export default function TeacherDashboard() {
 
       <main className="w-full max-w-5xl mx-auto px-3 sm:px-5 pt-4 sm:pt-8 pb-16 sm:pb-24 relative z-10 transition-all duration-300 flex flex-col items-center">
 
-        {/* WELCOME BANNER - NEW SECTION */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -459,13 +434,13 @@ export default function TeacherDashboard() {
           className="w-full mb-6 sm:mb-8"
         >
           <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-pink-600/20 border border-white/10 backdrop-blur-xl p-5 sm:p-7">
-            {/* Decorative elements */}
+            
             <div className="absolute -top-20 -right-20 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
             <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
             
             <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-4">
-                {/* Avatar with gradient */}
+               
                 <div className="relative">
                   <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xl">
                     <GraduationCap size={32} className="text-white" />
@@ -473,7 +448,6 @@ export default function TeacherDashboard() {
                   <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-[#1a1f2c]"></div>
                 </div>
                 
-                {/* Welcome text */}
                 <div>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
                     {getGreeting()}, <span className="bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">{displayName}</span>
@@ -492,7 +466,6 @@ export default function TeacherDashboard() {
                 </div>
               </div>
 
-              {/* Quick stats for desktop */}
               <div className="hidden sm:flex items-center gap-3 bg-[#0f1219]/80 border border-white/10 rounded-xl px-5 py-3">
                 <div className="text-right">
                   <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Teacher since</p>
@@ -506,7 +479,6 @@ export default function TeacherDashboard() {
               </div>
             </div>
 
-            {/* Mobile quick stats */}
             <div className="sm:hidden flex items-center justify-around mt-4 pt-4 border-t border-white/10">
               <div className="text-center">
                 <p className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">Teacher since</p>
@@ -521,10 +493,9 @@ export default function TeacherDashboard() {
           </div>
         </motion.div>
 
-        {/* MAIN SPLIT LAYOUT FOR CONTENT - Responsive grid */}
         <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 lg:gap-8 place-items-center md:place-items-stretch">
 
-          {/* UPLOAD FORM - Collapsible on mobile */}
+          
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -533,7 +504,7 @@ export default function TeacherDashboard() {
           >
             <div className="lg:sticky lg:top-24 bg-[#1a1f2c]/80 border border-white/10 rounded-2xl sm:rounded-[2rem] overflow-hidden backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all">
               
-              {/* Mobile Upload Header - Collapsible */}
+              
               <div 
                 className="md:hidden flex items-center justify-between p-4 cursor-pointer"
                 onClick={() => setIsUploadFormExpanded(!isUploadFormExpanded)}
@@ -553,7 +524,6 @@ export default function TeacherDashboard() {
                 />
               </div>
 
-              {/* Desktop Header - Hidden on mobile */}
               <div className="hidden md:flex items-center gap-4 p-6 sm:p-8 pb-0">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
                   <CloudUpload className="text-white" size={24} />
@@ -564,7 +534,6 @@ export default function TeacherDashboard() {
                 </div>
               </div>
 
-              {/* Upload Form - Collapsible on mobile */}
               <AnimatePresence>
                 {(isUploadFormExpanded || (typeof window !== 'undefined' && window.innerWidth >= 768)) && (
                   <motion.form 
@@ -656,7 +625,6 @@ export default function TeacherDashboard() {
             </div>
           </motion.div>
 
-          {/* FILES LIST AREA - Full width on mobile, 7 cols on tablet, 8 on desktop */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -664,10 +632,8 @@ export default function TeacherDashboard() {
             className="md:col-span-7 lg:col-span-8 w-full"
           >
 
-            {/* Library Header - Responsive */}
             <div className="flex flex-col gap-4 mb-4 sm:mb-6 bg-[#1a1f2c]/80 backdrop-blur-xl p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
               
-              {/* Title and View Toggle Row */}
               <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-3">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center border border-white/10 shadow-lg">
@@ -679,7 +645,6 @@ export default function TeacherDashboard() {
                   </div>
                 </div>
 
-                {/* Tab Switcher - Compact on mobile */}
                 <div className="flex bg-[#0f1219] p-1 rounded-lg border border-white/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] w-full xs:w-auto">
                   {[
                     { id: 'my', label: 'Mine', count: myFilesCount, color: 'bg-indigo-500/20 text-indigo-300' },
@@ -702,9 +667,8 @@ export default function TeacherDashboard() {
                 </div>
               </div>
 
-              {/* Search and Filter Row */}
               <div className="flex flex-col sm:flex-row gap-2">
-                {/* Search Bar */}
+                
                 <div className="flex-1 relative">
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
@@ -716,7 +680,6 @@ export default function TeacherDashboard() {
                   />
                 </div>
 
-                {/* Filter Button - Mobile */}
                 <button
                   onClick={() => setShowFilters(!showFilters)}
                   className="sm:hidden flex items-center justify-center gap-1.5 bg-[#0f1219] border border-white/10 rounded-lg px-3 py-2 text-xs text-slate-300"
@@ -728,7 +691,6 @@ export default function TeacherDashboard() {
                   )}
                 </button>
 
-                {/* Subject Filter - Desktop */}
                 <select
                   value={subjectFilter}
                   onChange={(e) => setSubjectFilter(e.target.value)}
@@ -741,7 +703,6 @@ export default function TeacherDashboard() {
                 </select>
               </div>
 
-              {/* Mobile Filter Options */}
               <AnimatePresence>
                 {showFilters && (
                   <motion.div
@@ -768,7 +729,6 @@ export default function TeacherDashboard() {
               </AnimatePresence>
             </div>
 
-            {/* Files Grid */}
             {files.length === 0 ? (
               <div className="text-center py-12 sm:py-16 bg-[#1a1f2c]/50 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/10 relative overflow-hidden group shadow-xl">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 sm:w-60 h-40 sm:h-60 bg-indigo-500/10 blur-[60px] rounded-full pointer-events-none"></div>
@@ -809,7 +769,7 @@ export default function TeacherDashboard() {
                       <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
 
                       <div className="flex flex-col gap-3">
-                        {/* Header Row */}
+                        
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3 flex-1 min-w-0">
                             <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/10 flex-shrink-0 group-hover:from-indigo-500/30 group-hover:to-purple-600/30 transition-all duration-300">
@@ -844,7 +804,6 @@ export default function TeacherDashboard() {
                           )}
                         </div>
 
-                        {/* Action Buttons */}
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2">
                           <button
                             onClick={() => handleOpen(file._id, file.title)}
@@ -881,7 +840,6 @@ export default function TeacherDashboard() {
         </div>
       </main>
 
-      {/* Add custom scrollbar hide class and responsive breakpoints */}
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
