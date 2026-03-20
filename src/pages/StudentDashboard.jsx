@@ -55,6 +55,17 @@ export default function StudentDashboard() {
     })();
   }, []);
 
+  useEffect(() => {
+    if (showMobileMenu) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showMobileMenu]);
+
   if (!user || user.role !== "student") {
     navigate("/login");
     return null;
@@ -85,7 +96,7 @@ export default function StudentDashboard() {
     <div className="relative min-h-screen bg-[#03050C] text-slate-200 overflow-x-hidden font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
 
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-       
+
         <motion.div
           variants={floatingOrb}
           animate="animate"
@@ -153,7 +164,7 @@ export default function StudentDashboard() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 top-[4rem] sm:top-[5rem] -mx-4 sm:-mx-6 z-40 bg-[#03050C]/60 backdrop-blur-md md:hidden min-h-screen"
+                  className="fixed inset-0 top-[64px] z-40 bg-[#03050C]/60 backdrop-blur-md sm:hidden"
                   onClick={() => setShowMobileMenu(false)}
                 />
 
@@ -162,7 +173,7 @@ export default function StudentDashboard() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-0 right-0 mt-2 sm:mt-4 mx-2 sm:mx-0 z-50 md:hidden overflow-hidden bg-[#0a0d16] border border-white/10 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+                  className="fixed left-4 right-4 top-[72px] z-50 sm:hidden overflow-hidden bg-[#0a0d16] border border-white/10 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.5)] max-w-md mx-auto"
                 >
                   <div className="p-4 flex flex-col gap-3">
                     <button
