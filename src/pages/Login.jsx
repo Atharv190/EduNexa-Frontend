@@ -16,25 +16,30 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      setLoading(true);
-      const res = await api.post("/auth/login", { email, password });
-      loginUser(res.data.user, res.data.token);
+  try {
+    setLoading(true);
 
-      if (res.data.user.role === "teacher") {
-        navigate("/teacher/dashboard");
-      } else {
-        navigate("/student/dashboard");
-      }
-    } catch (err) {
-      setError(err.response?.data?.message || "Invalid email or password");
-    } finally {
-      setLoading(false);
+    const res = await api.post("/auth/login", { email, password });
+
+    loginUser(res.data.user, res.data.token);
+
+    if (res.data.user.role === "admin") {
+      navigate("/admin"); 
+    } else if (res.data.user.role === "teacher") {
+      navigate("/teacher/dashboard"); 
+    } else {
+      navigate("/student/dashboard"); 
     }
-  };
+
+  } catch (err) {
+    setError(err.response?.data?.message || "Invalid email or password");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-[100dvh] w-full flex bg-[#03050C] font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-x-hidden">
