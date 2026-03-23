@@ -74,7 +74,6 @@ export default function Home() {
       gradient: "from-indigo-400 via-blue-400 to-cyan-400",
     },
     light: {
-      // Soft blue-gray theme - easy on eyes
       bg: "bg-gradient-to-br from-[#EFF3F8] via-[#F5F7FA] to-[#E8EEF5]",
       bgGradient: "from-[#EFF3F8] via-[#F5F7FA] to-[#E8EEF5]",
       cardBg: "bg-white/90",
@@ -99,7 +98,6 @@ export default function Home() {
   return (
     <div className={`relative min-h-screen ${currentTheme.bg} overflow-x-hidden font-sans transition-colors duration-300 selection:bg-blue-500/30 selection:text-blue-200`}>
 
-      {/* Animated Background Orbs */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <motion.div
           variants={floatingOrb}
@@ -236,7 +234,7 @@ export default function Home() {
             </motion.h1>
 
             <motion.p variants={fadeUp} className={`text-sm sm:text-base md:text-lg ${currentTheme.textSecondary} max-w-2xl mx-auto mb-8 leading-relaxed font-medium px-2`}>
-              Upload your notes, PDFs, or slides. Get instant structured summaries, flashcards, and adaptive practice quizzes designed to test real understanding.
+              Upload your notes, PDFs or slides. Get instant structured summaries, flashcards and adaptive practice quizzes designed to test real understanding.
             </motion.p>
 
             <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
