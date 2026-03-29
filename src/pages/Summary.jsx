@@ -31,7 +31,7 @@ export default function Summary() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("overview");
-  const [readingTime, setReadingTime] = useState(0);
+  const [setReadingTime] = useState(0);
   const contentRef = useRef(null);
 
   useEffect(() => {
