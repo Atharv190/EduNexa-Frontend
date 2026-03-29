@@ -19,12 +19,15 @@ import {
   Menu,
   X,
   ChevronDown,
-  Filter,
   Search,
   GraduationCap,
   Calendar,
   Grid3x3,
-  List
+  List,
+  FolderOpen,
+  Globe,
+  Rocket,
+  Star,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
@@ -43,17 +46,16 @@ export default function TeacherDashboard() {
   const [globalFilesCount, setGlobalFilesCount] = useState(0);
   const [myFilesCount, setMyFilesCount] = useState(0);
 
-  const [view, setView] = useState("my"); // 'my' or 'all'
+  const [view, setView] = useState("my");
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUploadFormExpanded, setIsUploadFormExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
   const [subjectFilter, setSubjectFilter] = useState("all");
   const [availableSubjects, setAvailableSubjects] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [layoutMode, setLayoutMode] = useState("grid"); // 'grid' or 'list'
+  const [layoutMode, setLayoutMode] = useState("grid");
 
   const [form, setForm] = useState({
     title: "",
@@ -62,13 +64,11 @@ export default function TeacherDashboard() {
     file: null,
   });
 
-  // Update time every minute
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  // Format date for display
   const formatDate = (date) => {
     return date.toLocaleDateString('en-US', { 
       weekday: 'long', 
@@ -78,7 +78,6 @@ export default function TeacherDashboard() {
     });
   };
 
-  // Get greeting based on time of day
   const getGreeting = () => {
     const hour = currentTime.getHours();
     if (hour < 12) return "Good morning";
@@ -86,13 +85,11 @@ export default function TeacherDashboard() {
     return "Good evening";
   };
 
-  // Extract unique subjects from files
   useEffect(() => {
     const subjects = [...new Set(files.map(f => f.subject).filter(Boolean))];
     setAvailableSubjects(subjects);
   }, [files]);
 
-  // Filter files based on search query and subject
   useEffect(() => {
     let filtered = [...files];
     
@@ -189,26 +186,19 @@ export default function TeacherDashboard() {
   const handleOpen = async (fileId) => {
     try {
       setOpeningFile(true);
-
       const res = await api.get(`/files/download/${fileId}`, {
         responseType: "blob",
       });
-
       const pdfBlob = new Blob([res.data], { type: "application/pdf" });
       const pdfUrl = URL.createObjectURL(pdfBlob);
-
       const newTab = window.open(pdfUrl, "_blank");
-
       if (!newTab) {
         window.location.href = pdfUrl;
       }
-
       setOpeningFile(false);
-
       setTimeout(() => {
         URL.revokeObjectURL(pdfUrl);
       }, 60000);
-
     } catch (err) {
       console.error(err);
       alert("Failed to open file");
@@ -244,107 +234,93 @@ export default function TeacherDashboard() {
   if (!user) return null;
 
   const displayName = user.username || user.name || user.email?.split('@')[0] || "Teacher";
-
-  // Dynamic layout classes
   const layoutClasses = layoutMode === "grid" 
-    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-5" 
+    ? "grid grid-cols-1 sm:grid-cols-2 gap-5" 
     : "flex flex-col gap-3";
 
+  const statsCards = [
+    { icon: FolderOpen, label: "My Resources", value: myFilesCount, color: "blue" },
+    { icon: Globe, label: "Global Library", value: globalFilesCount, color: "purple" },
+  ];
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-[#0a0c10] via-[#0f1219] to-[#1a1f2c] text-slate-200 overflow-x-hidden font-sans selection:bg-indigo-500/40 selection:text-white">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0A0F] via-[#0F0F14] to-[#0A0A0F] text-gray-200">
       {openingFile && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[100]">
-          <div className="bg-[#0f1219] px-6 py-5 rounded-xl text-center border border-white/10 max-w-xs w-full">
-            <p className="text-white text-lg font-semibold">
-              📂 Opening file...
-            </p>
-            <p className="text-slate-400 text-sm mt-2">
-              Please wait while your material loads
-            </p>
-            <div className="mt-4 flex justify-center">
-              <div className="w-5 h-5 border-2 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-[100]">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-[#1A1A1F] px-8 py-6 rounded-2xl text-center border border-gray-800 shadow-2xl max-w-xs w-full"
+          >
+            <div className="relative">
+              <div className="relative w-16 h-16 mx-auto mb-4">
+                <div className="w-full h-full border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
+                <FileText className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-blue-400" />
+              </div>
             </div>
-          </div>
+            <p className="text-white text-lg font-bold mb-2">Opening file...</p>
+            <p className="text-gray-400 text-sm">Please wait while your material loads</p>
+          </motion.div>
         </div>
       )}
       
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 -left-40 w-[500px] h-[500px] bg-purple-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-        <div className="absolute top-0 -right-40 w-[500px] h-[500px] bg-indigo-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-40 left-20 w-[500px] h-[500px] bg-blue-600/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0%200h60v60H0z%22%20fill%3D%22none%22%20stroke%3D%22rgba(99%2C102%2C241%2C0.03)%22%20stroke-width%3D%220.5%22%2F%3E%3C%2Fsvg%3E')] opacity-20"></div>
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-indigo-400/20 rounded-full"
-              initial={{
-                x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
-              }}
-              animate={{
-                x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
-                transition: {
-                  duration: Math.random() * 10 + 10,
-                  repeat: Infinity,
-                  ease: "linear"
-                }
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      <nav className="sticky top-0 z-50 pt-2 sm:pt-4 px-3 sm:px-6 transition-all w-full">
-        <div className="w-full max-w-5xl mx-auto h-[60px] sm:h-[72px] bg-[#1a1f2c]/90 backdrop-blur-xl border border-white/10 rounded-[16px] sm:rounded-[20px] flex justify-between items-center px-3 sm:px-5 shadow-lg relative z-50">
-          <div className="flex items-center gap-1.5 sm:gap-3 group cursor-pointer z-50">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
-              <Sparkles className="text-white w-3.5 h-3.5 sm:w-5 sm:h-5" />
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 pt-3 sm:pt-4 px-3 sm:px-6 w-full">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-5xl mx-auto h-[60px] sm:h-[72px] bg-[#1A1A1F]/80 backdrop-blur-xl border border-gray-800 rounded-[20px] flex justify-between items-center px-4 sm:px-6 shadow-xl relative z-50"
+        >
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg">
+              <Sparkles className="text-white w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <span className="font-extrabold text-lg sm:text-2xl text-white tracking-tight">EduNexa</span>
-            <span className="hidden xs:inline-flex px-2 sm:px-3 py-1 rounded-lg bg-indigo-500/20 text-[8px] sm:text-[10px] uppercase font-bold tracking-widest text-indigo-300 border border-indigo-500/30 ml-1 sm:ml-2">Teacher</span>
+            <span className="hidden xs:inline-flex px-2 sm:px-3 py-1 rounded-lg bg-blue-500/20 text-[8px] sm:text-[10px] uppercase font-bold tracking-widest text-blue-300 border border-blue-500/30 ml-1 sm:ml-2">
+              Teacher
+            </span>
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            <div className="flex items-center h-12 bg-[#0f1219] border border-white/10 rounded-xl px-5 gap-5 backdrop-blur-sm">
-              <div className="flex items-center gap-3 border-r border-white/10 pr-5 h-full">
-                <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.5)]"></div>
+            <div className="flex items-center h-12 bg-[#0F0F14] border border-gray-800 rounded-xl px-5 gap-5">
+              <div className="flex items-center gap-3 border-r border-gray-800 pr-5 h-full">
+                <div className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse"></div>
                 <div className="flex flex-col justify-center">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">My Files</span>
+                  <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-0.5">My Files</span>
                   <span className="text-base font-black text-white leading-none tracking-tight">{myFilesCount}</span>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-400"></div>
                 <div className="flex flex-col justify-center">
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">Global</span>
+                  <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-0.5">Global</span>
                   <span className="text-base font-black text-white leading-none tracking-tight">{globalFilesCount}</span>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center h-12 gap-3 px-4 rounded-xl bg-[#0f1219] border border-white/10 text-sm font-bold text-slate-200 backdrop-blur-sm">
-              <div className="bg-gradient-to-br from-indigo-500/20 to-purple-600/20 p-1.5 rounded-lg flex items-center justify-center">
-                <User size={16} className="text-indigo-300" />
-              </div>
-              <span className="tracking-wide text-[14px]">{displayName}</span>
+            <div className="flex items-center h-12 gap-3 px-4 rounded-xl bg-[#0F0F14] border border-gray-800 text-sm font-bold">
+              <User size={16} className="text-blue-400" />
+              <span className="tracking-wide text-[14px] text-white">{displayName}</span>
             </div>
 
-            <button onClick={handleLogout} className="h-12 px-5 rounded-xl bg-[#0f1219] hover:bg-red-500/20 border border-white/10 transition-all flex items-center justify-center gap-2 text-[14px] font-bold text-slate-300 hover:text-red-400 group">
-              <LogOut size={16} className="text-slate-400 group-hover:text-red-400" />
+            <button
+              onClick={handleLogout}
+              className="h-12 px-5 rounded-xl bg-[#0F0F14] hover:bg-red-500/10 border border-gray-800 transition-all flex items-center justify-center gap-2 text-[14px] font-bold text-gray-300 hover:text-red-400 group"
+            >
+              <LogOut size={16} className="text-gray-400 group-hover:text-red-400" />
               <span className="hidden sm:inline">Logout</span>
             </button>
           </div>
 
           <button
-            className="lg:hidden p-2 sm:p-2.5 rounded-xl bg-[#0f1219] border border-white/10 text-slate-300 flex items-center justify-center transition-all hover:bg-[#1a1f2c] relative z-50"
+            className="lg:hidden p-2 sm:p-2.5 rounded-xl bg-[#0F0F14] border border-gray-800 text-gray-300 flex items-center justify-center transition-all hover:bg-[#1A1A1F] relative z-50"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
-        </div>
+        </motion.div>
 
         <AnimatePresence>
           {isMobileMenuOpen && (
@@ -353,7 +329,6 @@ export default function TeacherDashboard() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
                 className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
                 onClick={() => setIsMobileMenuOpen(false)}
               />
@@ -361,192 +336,160 @@ export default function TeacherDashboard() {
                 initial={{ opacity: 0, y: -20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
-                className="absolute top-[68px] left-3 right-3 bg-[#1a1f2c]/95 backdrop-blur-2xl border border-white/10 rounded-[20px] p-4 shadow-2xl z-50 lg:hidden flex flex-col gap-3 origin-top mobile-menu-container max-w-md mx-auto"
+                transition={{ duration: 0.2 }}
+                className="absolute top-[68px] left-3 right-3 bg-[#1A1A1F] border border-gray-800 rounded-[20px] p-4 shadow-2xl z-50 lg:hidden flex flex-col gap-3 mobile-menu-container max-w-md mx-auto"
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Mobile Menu</span>
-                  <span className="inline-flex px-2.5 py-1 rounded-lg bg-indigo-500/20 text-[9px] uppercase font-bold tracking-widest text-indigo-300 border border-indigo-500/30">Teacher</span>
+                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Mobile Menu</span>
+                  <span className="inline-flex px-2.5 py-1 rounded-lg bg-blue-500/20 text-[9px] uppercase font-bold tracking-widest text-blue-300 border border-blue-500/30">Teacher</span>
                 </div>
-                <div className="flex flex-col gap-2 bg-[#0f1219] rounded-xl p-4 border border-white/10">
+                
+                <div className="flex flex-col gap-2 bg-[#0F0F14] rounded-xl p-4 border border-gray-800">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_12px_rgba(129,140,248,0.6)]"></div>
-                      <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">My Files</span>
+                      <div className="w-2.5 h-2.5 rounded-full bg-blue-400"></div>
+                      <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">My Files</span>
                     </div>
                     <span className="text-xl font-black text-white">{myFilesCount}</span>
                   </div>
-                  <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                  <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-gray-800 to-transparent"></div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_12px_rgba(168,85,247,0.6)]"></div>
-                      <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Global Files</span>
+                      <div className="w-2.5 h-2.5 rounded-full bg-purple-400"></div>
+                      <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Global Files</span>
                     </div>
                     <span className="text-xl font-black text-white">{globalFilesCount}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-[#0f1219] to-[#1a1f2c] border border-white/10">
-                  <div className="bg-gradient-to-br from-indigo-500/20 to-purple-600/20 p-2 rounded-lg flex items-center justify-center shadow-inner">
-                    <User size={18} className="text-indigo-300" />
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-[#0F0F14] border border-gray-800">
+                  <div className="bg-blue-500/20 p-2 rounded-lg">
+                    <User size={18} className="text-blue-400" />
                   </div>
-                  <div className="flex flex-col flex-1 min-w-0">
-                    <span className="text-[8px] uppercase font-bold text-slate-500 tracking-wider">Logged in as</span>
+                  <div className="flex flex-col flex-1">
+                    <span className="text-[8px] uppercase font-bold text-gray-500 tracking-wider">Logged in as</span>
                     <span className="text-sm font-bold text-white truncate">{displayName}</span>
-                    <span className="text-[10px] text-slate-400 truncate">{user.email || ''}</span>
+                    <span className="text-[10px] text-gray-400 truncate">{user.email || ''}</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 mt-1">
                   <button
-                    onClick={() => {
-                      setView("my");
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 ${
+                    onClick={() => { setView("my"); setIsMobileMenuOpen(false); }}
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                       view === "my" 
-                        ? "bg-indigo-500/20 border border-indigo-500/30 text-indigo-300" 
-                        : "bg-[#0f1219] border border-white/10 text-slate-300"
+                        ? "bg-blue-500/20 border border-blue-500/30 text-blue-300" 
+                        : "bg-[#0F0F14] border border-gray-800 text-gray-300"
                     }`}
                   >
-                    <FileText size={14} className={view === "my" ? "text-indigo-400" : "text-slate-400"} />
+                    <FileText size={14} />
                     My Files
                   </button>
                   <button
-                    onClick={() => {
-                      setView("all");
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 ${
+                    onClick={() => { setView("all"); setIsMobileMenuOpen(false); }}
+                    className={`py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
                       view === "all" 
                         ? "bg-purple-500/20 border border-purple-500/30 text-purple-300" 
-                        : "bg-[#0f1219] border border-white/10 text-slate-300"
+                        : "bg-[#0F0F14] border border-gray-800 text-gray-300"
                     }`}
                   >
-                    <Layout size={14} className={view === "all" ? "text-purple-400" : "text-slate-400"} />
+                    <Layout size={14} />
                     Library
                   </button>
                 </div>
 
                 <button
                   onClick={handleLogout}
-                  className="w-full py-3 mt-1 rounded-xl bg-gradient-to-r from-red-500/10 to-red-500/5 hover:from-red-500/20 hover:to-red-500/10 text-red-400 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:text-red-300 text-xs"
+                  className="w-full py-3 mt-1 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-bold flex items-center justify-center gap-2 transition-all text-xs"
                 >
                   <LogOut size={14} />
-                  <span>Logout securely</span>
+                  <span>Logout</span>
                 </button>
-
-                <div className="text-center mt-1">
-                  <span className="text-[7px] text-slate-600">EduNexa Teacher v1.0</span>
-                </div>
               </motion.div>
             </>
           )}
         </AnimatePresence>
       </nav>
 
-      <main className="w-full max-w-5xl mx-auto px-3 sm:px-5 pt-4 sm:pt-8 pb-16 sm:pb-24 relative z-10 transition-all duration-300">
+      <main className="w-full max-w-5xl mx-auto px-3 sm:px-5 pt-6 sm:pt-10 pb-16 sm:pb-24 relative z-10">
+        {/* Hero Section */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, type: "spring" }}
-          className="w-full mb-6 sm:mb-8"
+          transition={{ duration: 0.6 }}
+          className="w-full mb-8"
         >
-          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-pink-600/20 border border-white/10 backdrop-blur-xl p-5 sm:p-7">
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
-            
-            <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-xl">
-                    <GraduationCap size={32} className="text-white" />
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-[#1a1f2c]"></div>
+          <div className="rounded-3xl bg-gradient-to-br from-[#1A1A1F] to-[#121217] border border-gray-800 p-6 sm:p-8 shadow-xl">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-500 flex items-center justify-center shadow-lg">
+                  <GraduationCap size={32} className="text-white" />
                 </div>
                 
                 <div>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-                    {getGreeting()}, <span className="bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">{displayName}</span>
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+                    {getGreeting()}, {displayName}
                   </h1>
                   <div className="flex flex-wrap items-center gap-3 mt-2">
-                    <div className="flex items-center gap-1.5 text-slate-400">
+                    <div className="flex items-center gap-1.5 text-gray-400">
                       <Calendar size={14} />
-                      <span className="text-xs sm:text-sm font-medium">{formatDate(currentTime)}</span>
-                    </div>
-                    <span className="w-1 h-1 rounded-full bg-slate-600"></span>
-                    <div className="flex items-center gap-1.5 text-slate-400">
-                      <BookOpen size={14} />
-                      <span className="text-xs sm:text-sm font-medium">{myFilesCount} {myFilesCount === 1 ? 'resource' : 'resources'}</span>
+                      <span className="text-xs sm:text-sm">{formatDate(currentTime)}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="hidden sm:flex items-center gap-3 bg-[#0f1219]/80 border border-white/10 rounded-xl px-5 py-3">
-                <div className="text-right">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Teacher since</p>
-                  <p className="text-sm font-bold text-white">2026</p>
-                </div>
-                <div className="w-px h-8 bg-white/10"></div>
-                <div className="text-right">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Global files</p>
-                  <p className="text-sm font-bold text-white">{globalFilesCount}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:hidden flex items-center justify-around mt-4 pt-4 border-t border-white/10">
-              <div className="text-center">
-                <p className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">Teacher since</p>
-                <p className="text-xs font-bold text-white">2024</p>
-              </div>
-              <div className="w-px h-6 bg-white/10"></div>
-              <div className="text-center">
-                <p className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">Global files</p>
-                <p className="text-xs font-bold text-white">{globalFilesCount}</p>
+              <div className="grid grid-cols-2 gap-3">
+                {statsCards.map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-[#0F0F14] rounded-xl p-3 text-center border border-gray-800 hover:border-gray-700 hover:bg-[#14141A] transition-all duration-300"
+                  >
+                    <div className={`w-8 h-8 rounded-lg bg-${stat.color}-500/20 flex items-center justify-center mx-auto mb-2`}>
+                      <stat.icon size={14} className={`text-${stat.color}-400`} />
+                    </div>
+                    <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wider">{stat.label}</p>
+                    <p className="text-lg font-bold text-white">{stat.value}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </motion.div>
 
-        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
-          {/* Upload Section - Hidden when viewing "all" resources */}
+        <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* Upload Section */}
           {view === "my" && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.5, type: 'spring', delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
               className="lg:col-span-4 w-full"
             >
-              <div className="sticky top-24 bg-[#1a1f2c]/80 border border-white/10 rounded-2xl sm:rounded-[2rem] overflow-hidden backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all">
+              <div className="sticky top-24 bg-gradient-to-br from-[#1A1A1F] to-[#121217] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
                 <div 
                   className="lg:hidden flex items-center justify-between p-4 cursor-pointer"
                   onClick={() => setIsUploadFormExpanded(!isUploadFormExpanded)}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center border border-white/10 shadow-lg">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl flex items-center justify-center">
                       <CloudUpload className="text-white" size={18} />
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-white">Upload Material</h3>
-                      <p className="text-[10px] text-slate-400">Add new content</p>
+                      <p className="text-[10px] text-gray-500">Add new content to library</p>
                     </div>
                   </div>
-                  <ChevronDown 
-                    size={18} 
-                    className={`text-slate-400 transition-transform duration-300 ${isUploadFormExpanded ? 'rotate-180' : ''}`}
-                  />
+                  <ChevronDown size={18} className={`text-gray-400 transition-transform duration-300 ${isUploadFormExpanded ? 'rotate-180' : ''}`} />
                 </div>
 
-                <div className="hidden lg:flex items-center gap-4 p-6 lg:p-8 pb-0">
-                  <div className="w-12 h-12 lg:w-14 lg:h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg">
+                <div className="hidden lg:flex items-center gap-4 p-6 pb-0">
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
                     <CloudUpload className="text-white" size={24} />
                   </div>
                   <div>
-                    <h2 className="text-xl lg:text-2xl font-black text-white tracking-tight">Upload Material</h2>
-                    <p className="text-[10px] lg:text-xs text-slate-400 font-medium mt-1">Add new content to library</p>
+                    <h2 className="text-2xl font-bold text-white tracking-tight">Upload Material</h2>
+                    <p className="text-xs text-gray-500 font-medium mt-1">Share knowledge with students</p>
                   </div>
                 </div>
 
@@ -560,78 +503,75 @@ export default function TeacherDashboard() {
                       onSubmit={handleSubmit} 
                       className="overflow-hidden"
                     >
-                      <div className="p-4 lg:p-6 space-y-4 lg:space-y-5">
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="space-y-1.5">
-                          <label className="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Title</label>
+                      <div className="p-5 space-y-4">
+                        <div>
+                          <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 mb-1 block">Title</label>
                           <input
                             name="title"
-                            placeholder="e.g. Advanced Mathematics"
+                            placeholder="e.g., Advanced Mathematics"
                             value={form.title}
                             onChange={handleChange}
                             required
-                            className="w-full bg-[#0f1219] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium"
+                            className="w-full bg-[#0F0F14] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
                           />
-                        </motion.div>
+                        </div>
 
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="space-y-1.5">
-                          <label className="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Subject</label>
+                        <div>
+                          <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 mb-1 block">Subject</label>
                           <input
                             name="subject"
-                            placeholder="e.g. Mathematics"
+                            placeholder="e.g., Mathematics"
                             value={form.subject}
                             onChange={handleChange}
                             required
-                            className="w-full bg-[#0f1219] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium"
+                            className="w-full bg-[#0F0F14] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
                           />
-                        </motion.div>
+                        </div>
 
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="space-y-1.5">
-                          <label className="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">Description</label>
+                        <div>
+                          <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1 mb-1 block">Description</label>
                           <textarea
                             name="description"
                             placeholder="Provide a brief overview..."
                             value={form.description}
                             onChange={handleChange}
                             rows={2}
-                            className="w-full bg-[#0f1219] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all font-medium resize-none"
+                            className="w-full bg-[#0F0F14] border border-gray-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all resize-none"
                           />
-                        </motion.div>
+                        </div>
 
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                        <div>
                           <div
                             onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
                             onDragLeave={() => setDragActive(false)}
                             onDrop={handleDrop}
                             className={`relative overflow-hidden border-2 rounded-xl p-5 text-center cursor-pointer transition-all duration-300
-                                ${dragActive ? "border-indigo-500 border-solid bg-indigo-500/10 scale-[1.02]" : "border-white/10 border-dashed bg-[#0f1219] hover:border-indigo-500/50 hover:bg-[#1a1f2c]"}`}
+                                ${dragActive ? "border-blue-500 border-solid bg-blue-500/10 scale-[1.02]" : "border-gray-800 border-dashed bg-[#0F0F14] hover:border-blue-500/50 hover:bg-[#1A1A1F]"}`}
                           >
                             <input type="file" name="file" onChange={handleChange} className="hidden" id="fileUpload" />
                             <label htmlFor="fileUpload" className="block cursor-pointer">
-                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-2 transition-all ${dragActive ? 'bg-indigo-500/20 text-indigo-400' : 'bg-[#1e2336] text-slate-400'}`}>
-                                <CloudUpload size={20} />
+                              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-2 transition-all ${dragActive ? 'bg-blue-500/20 text-blue-400' : 'bg-[#1A1A1F] text-gray-400'}`}>
+                                <UploadCloud size={20} />
                               </div>
                               <p className="text-xs font-bold text-white mb-1">
-                                {form.file ? <span className="text-indigo-400 break-all">{form.file.name}</span> : "Click to browse or drag file"}
+                                {form.file ? <span className="text-blue-400 break-all">{form.file.name}</span> : "Click to browse or drag file"}
                               </p>
-                              <p className="text-[10px] font-medium text-slate-500">
+                              <p className="text-[10px] font-medium text-gray-500">
                                 {form.file ? "File ready to upload" : "Max file size: 50MB"}
                               </p>
                             </label>
                           </div>
-                        </motion.div>
+                        </div>
 
-                        <motion.button
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.5 }}
+                        <button
                           disabled={loading}
-                          className="w-full relative mt-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-6 py-3.5 rounded-xl font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(99,102,241,0.3)] disabled:opacity-70 disabled:pointer-events-none text-sm"
+                          className="w-full relative mt-2 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 py-3.5 rounded-xl font-bold transition-all disabled:opacity-70 disabled:pointer-events-none text-sm shadow-lg"
                         >
                           <span className="flex items-center justify-center gap-2">
                             {loading ? <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <UploadCloud size={16} />}
                             {loading ? "UPLOADING..." : "UPLOAD RESOURCE"}
                           </span>
-                        </motion.button>
+                        </button>
                       </div>
                     </motion.form>
                   )}
@@ -644,60 +584,64 @@ export default function TeacherDashboard() {
           <motion.div
             initial={{ opacity: 0, x: view === "my" ? 20 : 0 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, type: 'spring', delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             className={`${view === "my" ? "lg:col-span-8" : "lg:col-span-12"} w-full`}
           >
-            <div className="flex flex-col gap-4 mb-4 sm:mb-6 bg-[#1a1f2c]/80 backdrop-blur-xl p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+            <div className="flex flex-col gap-4 mb-5 bg-gradient-to-br from-[#1A1A1F] to-[#121217] p-5 rounded-2xl border border-gray-800">
               <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-3">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center border border-white/10 shadow-lg">
-                    <Layout className="text-white" size={18} />
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <Layout className="text-white" size={20} />
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-white tracking-tight">Resource Library</h2>
-                    <p className="text-[9px] sm:text-xs text-slate-400 font-medium">
+                    <h2 className="text-xl font-bold text-white tracking-tight">Resource Library</h2>
+                    <p className="text-[10px] text-gray-500 font-medium">
                       {view === "my" ? "Your personal teaching materials" : "Browse all community resources"}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  {/* Layout toggle buttons */}
-                  <div className="flex bg-[#0f1219] p-1 rounded-lg border border-white/10">
+                  <div className="flex bg-[#0F0F14] p-1 rounded-lg border border-gray-800">
                     <button
                       onClick={() => setLayoutMode("grid")}
-                      className={`p-1.5 rounded-md transition-all ${layoutMode === "grid" ? "bg-indigo-500/30 text-indigo-300" : "text-slate-500 hover:text-slate-300"}`}
-                      title="Grid view"
+                      className={`p-1.5 rounded-md transition-all ${layoutMode === "grid" ? "bg-blue-500/30 text-blue-300" : "text-gray-500 hover:text-gray-300"}`}
                     >
                       <Grid3x3 size={14} />
                     </button>
                     <button
                       onClick={() => setLayoutMode("list")}
-                      className={`p-1.5 rounded-md transition-all ${layoutMode === "list" ? "bg-indigo-500/30 text-indigo-300" : "text-slate-500 hover:text-slate-300"}`}
-                      title="List view"
+                      className={`p-1.5 rounded-md transition-all ${layoutMode === "list" ? "bg-blue-500/30 text-blue-300" : "text-gray-500 hover:text-gray-300"}`}
                     >
                       <List size={14} />
                     </button>
                   </div>
 
-                  <div className="flex bg-[#0f1219] p-1 rounded-lg border border-white/10">
+                  <div className="flex bg-[#0F0F14] p-1 rounded-lg border border-gray-800">
                     {[
-                      { id: 'my', label: 'Mine', count: myFilesCount },
-                      { id: 'all', label: 'All', count: globalFilesCount }
+                      { id: 'my', label: 'Mine', icon: FileText, count: myFilesCount },
+                      { id: 'all', label: 'All', icon: Globe, count: globalFilesCount }
                     ].map((tab) => (
                       <button
                         key={tab.id}
                         onClick={() => setView(tab.id)}
-                        className={`relative px-3 sm:px-4 py-1.5 rounded-md font-bold text-[10px] sm:text-xs transition-all duration-300 flex items-center gap-1 sm:gap-2 whitespace-nowrap ${
-                          view === tab.id ? 'text-white' : 'text-slate-500 hover:text-slate-300'
+                        className={`relative px-3 py-1.5 rounded-md font-bold text-[10px] transition-all duration-300 flex items-center gap-1 whitespace-nowrap ${
+                          view === tab.id ? 'text-white' : 'text-gray-500 hover:text-gray-300'
                         }`}
                       >
                         {view === tab.id && (
-                          <motion.div layoutId="activeTab" className="absolute inset-0 bg-white/10 border border-white/20 rounded-md shadow-sm" />
+                          <motion.div
+                            layoutId="activeTab"
+                            className="absolute inset-0 bg-white/10 border border-white/20 rounded-md shadow-sm"
+                            transition={{ type: "spring", duration: 0.5 }}
+                          />
                         )}
-                        <span className="relative z-10">{tab.label}</span>
-                        <span className={`relative z-10 px-1.5 py-0.5 rounded text-[8px] sm:text-[10px] font-black ${
-                          view === tab.id ? 'bg-indigo-500/20 text-indigo-300' : 'bg-slate-800 text-slate-400'
+                        <span className="relative z-10 flex items-center gap-1">
+                          <tab.icon size={12} />
+                          {tab.label}
+                        </span>
+                        <span className={`relative z-10 px-1.5 py-0.5 rounded text-[8px] font-black ${
+                          view === tab.id ? 'bg-blue-500/20 text-blue-300' : 'bg-gray-800 text-gray-400'
                         }`}>
                           {tab.count}
                         </span>
@@ -709,89 +653,53 @@ export default function TeacherDashboard() {
 
               <div className="flex flex-col sm:flex-row gap-2">
                 <div className="flex-1 relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                   <input
                     type="text"
                     placeholder="Search by title, description, or subject..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-[#0f1219] border border-white/10 rounded-lg pl-8 pr-3 py-2.5 text-xs sm:text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50"
+                    className="w-full bg-[#0F0F14] border border-gray-800 rounded-lg pl-8 pr-3 py-2.5 text-xs text-white placeholder:text-gray-600 focus:outline-none focus:border-blue-500/50"
                   />
                 </div>
 
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="sm:hidden flex items-center justify-center gap-1.5 bg-[#0f1219] border border-white/10 rounded-lg px-3 py-2.5 text-xs text-slate-300"
-                >
-                  <Filter size={14} />
-                  Filter
-                  {subjectFilter !== "all" && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-                  )}
-                </button>
-
-                <select
-                  value={subjectFilter}
-                  onChange={(e) => setSubjectFilter(e.target.value)}
-                  className="hidden sm:block bg-[#0f1219] border border-white/10 rounded-lg px-3 py-2.5 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-indigo-500/50 min-w-[130px]"
-                >
-                  <option value="all">All Subjects</option>
-                  {availableSubjects.map(subject => (
-                    <option key={subject} value={subject}>{subject}</option>
-                  ))}
-                </select>
-              </div>
-
-              <AnimatePresence>
-                {showFilters && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="sm:hidden overflow-hidden"
+                <div className="relative min-w-[140px]">
+                  <select
+                    value={subjectFilter}
+                    onChange={(e) => setSubjectFilter(e.target.value)}
+                    className="w-full appearance-none bg-[#0F0F14] border border-gray-800 rounded-lg px-3 py-2.5 pr-8 text-xs text-white focus:outline-none focus:border-blue-500/50 cursor-pointer"
                   >
-                    <div className="pt-2">
-                      <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1 block">Filter by Subject</label>
-                      <select
-                        value={subjectFilter}
-                        onChange={(e) => setSubjectFilter(e.target.value)}
-                        className="w-full bg-[#0f1219] border border-white/10 rounded-lg px-3 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500/50"
-                      >
-                        <option value="all">All Subjects</option>
-                        {availableSubjects.map(subject => (
-                          <option key={subject} value={subject}>{subject}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <option value="all">All Subjects</option>
+                    {availableSubjects.map(subject => (
+                      <option key={subject} value={subject}>{subject}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={12} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                </div>
+              </div>
             </div>
 
             {files.length === 0 ? (
-              <div className="text-center py-12 sm:py-16 bg-[#1a1f2c]/50 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/10 relative overflow-hidden group shadow-xl">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 sm:w-60 h-40 sm:h-60 bg-indigo-500/10 blur-[60px] rounded-full pointer-events-none"></div>
-                <div className="relative z-10 px-4">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500/20 to-purple-600/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
-                    <FileText className="text-indigo-400" size={24} />
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white mb-2 tracking-tight">Nothing here yet</h3>
-                  <p className="text-xs sm:text-sm text-slate-400 font-medium max-w-sm mx-auto">
-                    {view === "my" 
-                      ? "Your uploaded resources will appear here. Use the upload panel to get started."
-                      : "No resources available in the global library yet."}
-                  </p>
+              <div className="text-center py-16 bg-gradient-to-br from-[#1A1A1F] to-[#121217] rounded-2xl border border-gray-800">
+                <div className="w-20 h-20 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Rocket size={32} className="text-blue-400" />
                 </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Ready to create?</h3>
+                <p className="text-sm text-gray-400 max-w-sm mx-auto">
+                  {view === "my" 
+                    ? "Your uploaded resources will appear here. Upload your first teaching material to get started!"
+                    : "No resources available in the global library yet."}
+                </p>
               </div>
             ) : filteredFiles.length === 0 ? (
-              <div className="text-center py-12 bg-[#1a1f2c]/50 backdrop-blur-xl rounded-xl border border-white/10">
-                <p className="text-sm text-slate-400">No files match your search criteria</p>
+              <div className="text-center py-12 bg-gradient-to-br from-[#1A1A1F] to-[#121217] rounded-xl border border-gray-800">
+                <p className="text-sm text-gray-400">No files match your search criteria</p>
                 <button
                   onClick={() => {
                     setSearchQuery("");
                     setSubjectFilter("all");
                   }}
-                  className="mt-3 text-xs text-indigo-400 hover:text-indigo-300"
+                  className="mt-3 text-xs text-blue-400 hover:text-blue-300 transition"
                 >
                   Clear filters
                 </button>
@@ -802,98 +710,96 @@ export default function TeacherDashboard() {
                   {filteredFiles.map((file, i) => (
                     <motion.div
                       layout
-                      initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                      initial={{ opacity: 0, scale: 0.95, y: 20 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: -15 }}
-                      transition={{ delay: i * 0.03, duration: 0.3 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -20 }}
+                      transition={{ delay: i * 0.05, duration: 0.3 }}
                       key={file._id}
-                      className={`rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#1a1f2c] to-[#141823] backdrop-blur-xl border border-white/10 hover:border-indigo-500/40 transition-all duration-300 group relative overflow-hidden shadow-lg hover:shadow-indigo-500/10 hover:shadow-2xl hover:scale-[1.02] cursor-pointer ${
-                        layoutMode === "list" ? "p-4" : "p-4 sm:p-5"
+                      whileHover={{ scale: 1.02, y: -5 }}
+                      className={`rounded-2xl bg-gradient-to-br from-[#1A1A1F] to-[#121217] border border-gray-800 hover:border-blue-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden ${
+                        layoutMode === "list" ? "p-4" : "p-5"
                       }`}
                     >
-                      <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-indigo-500/30 to-purple-600/30 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-
+                      {/* Background glow effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-blue-500/5 group-hover:to-blue-500/5 transition-all duration-500 pointer-events-none"></div>
+                      
                       <div className={`flex ${layoutMode === "list" ? "flex-row items-center gap-4" : "flex-col gap-3"}`}>
-                        {/* File Icon */}
                         <div className={`${layoutMode === "list" ? "flex-shrink-0" : "w-full"} flex ${layoutMode === "list" ? "justify-start" : "justify-between items-start"}`}>
-                          <div className={`${layoutMode === "list" ? "w-12 h-12" : "w-14 h-14"} bg-gradient-to-br from-indigo-500/20 to-purple-600/20 rounded-xl flex items-center justify-center border border-white/10 group-hover:from-indigo-500/30 group-hover:to-purple-600/30 transition-all duration-300`}>
-                            <BookOpen className="text-indigo-400 group-hover:text-indigo-300" size={layoutMode === "list" ? 18 : 20} />
+                          <div className={`${layoutMode === "list" ? "w-12 h-12" : "w-14 h-14"} bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-gray-700 group-hover:border-blue-500/50 transition-all`}>
+                            <BookOpen className="text-blue-400" size={layoutMode === "list" ? 20 : 22} />
                           </div>
                           
                           {view === "my" && layoutMode !== "list" && (
                             <button
                               onClick={(e) => { e.stopPropagation(); handleDelete(file._id); }}
-                              className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all border border-red-500/20 active:scale-95"
-                              title="Delete"
+                              className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
                             >
-                              <Trash2 size={14} />
+                              <Trash2 size={15} />
                             </button>
                           )}
                         </div>
 
-                        {/* Content */}
                         <div className={`flex-1 min-w-0 ${layoutMode === "list" ? "flex-1" : ""}`}>
-                          <h3 className={`font-black text-white group-hover:text-indigo-300 transition-colors tracking-wide ${
-                            layoutMode === "list" ? "text-base mb-1" : "text-sm sm:text-base mb-2 line-clamp-2"
-                          }`} title={file.title}>
+                          <h3 className={`font-bold text-white group-hover:text-blue-400 transition-colors ${
+                            layoutMode === "list" ? "text-lg mb-1.5" : "text-lg mb-2 line-clamp-2"
+                          }`}>
                             {file.title}
                           </h3>
                           
                           <div className="flex flex-wrap items-center gap-2 mb-3">
-                            <span className="inline-block px-2 py-0.5 rounded-md bg-[#0f1219] border border-white/10 text-[9px] font-black uppercase tracking-widest text-indigo-300">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 text-[11px] font-bold uppercase tracking-widest text-blue-300">
+                              <Star size={10} className="fill-blue-400" />
                               {file.subject || "General"}
                             </span>
                             {view === "all" && file.createdBy?.username && (
-                              <span className="inline-flex items-center gap-1 text-[9px] text-slate-400">
-                                <User size={9} />
+                              <span className="inline-flex items-center gap-1 text-[11px] text-gray-400">
+                                <User size={10} />
                                 {file.createdBy.username}
                               </span>
                             )}
-                            {file.description && layoutMode !== "list" && (
-                              <p className="text-[10px] text-slate-400 line-clamp-2 mt-1 w-full">
-                                {file.description}
-                              </p>
-                            )}
                           </div>
 
-                          {/* Action Buttons */}
-                          <div className={`grid ${layoutMode === "list" ? "grid-cols-4 gap-2" : "grid-cols-2 sm:grid-cols-4 gap-2 mt-1"}`}>
+                          {file.description && layoutMode !== "list" && (
+                            <p className="text-sm text-gray-400 line-clamp-2 mb-4">
+                              {file.description}
+                            </p>
+                          )}
+
+                          {/* Single line buttons - all in one row */}
+                          <div className="flex flex-wrap gap-2 w-full">
                             <button
                               onClick={() => handleOpen(file._id)}
-                              className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-[#0f1219] hover:bg-white/10 text-slate-300 hover:text-white text-[10px] sm:text-xs font-bold transition-all active:scale-95 border border-white/10"
+                              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-1 rounded-lg bg-[#0F0F14] hover:bg-white/10 text-gray-300 hover:text-white text-xs font-bold transition-all border border-gray-700 hover:border-gray-600 whitespace-nowrap"
                             >
-                              <Eye size={11} /> View
+                              <Eye size={12} /> Open
                             </button>
                             <button
                               onClick={() => handleDownload(file._id)}
-                              className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-[#0f1219] hover:bg-white/10 text-slate-300 hover:text-white text-[10px] sm:text-xs font-bold transition-all active:scale-95 border border-white/10"
+                              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-1 rounded-lg bg-[#0F0F14] hover:bg-white/10 text-gray-300 hover:text-white text-xs font-bold transition-all border border-gray-700 hover:border-gray-600 whitespace-nowrap"
                             >
-                              <Download size={11} /> Download
+                              <Download size={12} /> Save
                             </button>
                             <button
                               onClick={() => navigate(`/files/${file._id}/summary`)}
-                              className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-300 hover:text-white text-[10px] sm:text-xs font-bold transition-all active:scale-95"
+                              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-1 rounded-lg bg-gradient-to-r from-blue-500/10 to-blue-600/10 hover:from-blue-500/20 hover:to-blue-600/20 border border-blue-500/20 text-blue-300 hover:text-white text-xs font-bold transition-all whitespace-nowrap"
                             >
-                              <Brain size={11} /> Summary
+                              <Brain size={12} /> Summary
                             </button>
                             <button
                               onClick={() => navigate(`/files/${file._id}/quiz`)}
-                              className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-300 hover:text-white text-[10px] sm:text-xs font-bold transition-all active:scale-95"
+                              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-1 rounded-lg bg-gradient-to-r from-purple-500/10 to-purple-600/10 hover:from-purple-500/20 hover:to-purple-600/20 border border-purple-500/20 text-purple-300 hover:text-white text-xs font-bold transition-all whitespace-nowrap"
                             >
-                              <MessageSquare size={11} /> Quiz
+                              <MessageSquare size={12} /> Quiz
                             </button>
                           </div>
                         </div>
 
-                        {/* Delete button for list view */}
                         {view === "my" && layoutMode === "list" && (
                           <button
                             onClick={(e) => { e.stopPropagation(); handleDelete(file._id); }}
-                            className="flex-shrink-0 p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all border border-red-500/20 active:scale-95"
-                            title="Delete"
+                            className="flex-shrink-0 p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={15} />
                           </button>
                         )}
                       </div>
@@ -907,57 +813,8 @@ export default function TeacherDashboard() {
       </main>
 
       <style jsx>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        
         @media (min-width: 480px) {
-          .xs\\:flex-none {
-            flex: none;
-          }
-          .xs\\:flex-row {
-            flex-direction: row;
-          }
-          .xs\\:items-center {
-            align-items: center;
-          }
-          .xs\\:w-auto {
-            width: auto;
-          }
-          .xs\\:inline-flex {
-            display: inline-flex;
-          }
-        }
-
-        @keyframes blob {
-          0% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-          100% {
-            transform: translate(0px, 0px) scale(1);
-          }
-        }
-
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-
-        .animation-delay-4000 {
-          animation-delay: 4s;
+          .xs\\:inline-flex { display: inline-flex; }
         }
       `}</style>
     </div>
