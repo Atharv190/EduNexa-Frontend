@@ -35,22 +35,24 @@ export default function Summary() {
   const contentRef = useRef(null);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await api.get(`/ai/${fileId}/summary`);
-        const summaryData = res.data.summary;
-        setSummary(summaryData);
-        
-        const textContent = JSON.stringify(summaryData);
-        const wordCount = textContent.split(/\s+/).length;
-        setReadingTime(Math.max(1, Math.ceil(wordCount / 200)));
-      } catch (err) {
-        console.error("Summary error:", err);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [fileId]);
+  (async () => {
+    try {
+      const res = await api.get(`/ai/${fileId}/summary`);
+      const summaryData = res.data.summary;
+      setSummary(summaryData);
+      
+      const textContent = JSON.stringify(summaryData);
+      const wordCount = textContent.split(/\s+/).length;
+      setReadingTime(Math.max(1, Math.ceil(wordCount / 200)));
+    } catch (err) {
+      console.error("Summary error:", err);
+    } finally {
+      setLoading(false);
+    }
+  })();
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [fileId]);
 
   const handleBack = () => {
     if (user?.role === "teacher") {
