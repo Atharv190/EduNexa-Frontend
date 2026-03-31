@@ -272,8 +272,7 @@ export default function StudentDashboard() {
               </Link>
             </div>
           </motion.div>
-
-          {/* Total Materials Card - Increased */}
+``
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

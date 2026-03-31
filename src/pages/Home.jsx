@@ -119,7 +119,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_0%,#000_80%,transparent_100%)]" />
       </div>
 
-      {/* Header */}
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -215,7 +214,7 @@ export default function Home() {
       </motion.header>
 
       <main className="pt-16 md:pt-20">
-        {/* Hero Section */}
+        
         <section className="relative z-10 pt-8 pb-10 sm:pt-12 sm:pb-16 md:pt-16 md:pb-20 px-4 sm:px-6 text-center">
           <motion.div variants={staggerContainer} initial="hidden" animate="show" className="max-w-4xl mx-auto flex flex-col items-center">
             <motion.div variants={fadeUp} className="mb-4">
@@ -261,7 +260,6 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* Features Section */}
         <section id="features" className="relative z-10 py-12 sm:py-16 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} className="text-center mb-10">
@@ -281,7 +279,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Designed for Ambitious Minds */}
         <section className={`relative z-10 py-14 sm:py-20 px-4 sm:px-6 ${isDark ? 'bg-white/[0.02]' : 'bg-blue-50/40'} border-y ${currentTheme.cardBorder} overflow-hidden`}>
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none" />
@@ -299,7 +296,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="relative z-10 py-12 sm:py-20 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto relative group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-indigo-500/30 rounded-[2rem] sm:rounded-[2.5rem] blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-700" />
@@ -318,7 +314,6 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Simple Footer */}
       <footer className={`relative z-10 border-t ${currentTheme.cardBorder} ${currentTheme.footerBg} py-8 sm:py-10 px-4 sm:px-6`}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">

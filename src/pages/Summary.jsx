@@ -1,4 +1,3 @@
-// src/pages/Summary.jsx
 import { useEffect, useState, useContext, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";

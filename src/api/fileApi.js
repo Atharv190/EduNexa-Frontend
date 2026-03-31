@@ -25,7 +25,6 @@ export const getAllFiles = () => {
   });
 };
 
-/* ✅ FINAL FIX: DELETE FILE */
 export const deleteFile = (fileId) => {
   return api.delete(`/files/${fileId}`, {
     headers: {

@@ -625,7 +625,6 @@ export default function Quiz() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black flex flex-col h-screen overflow-hidden">
-      {/* Warning Message */}
       <AnimatePresence>
         {showSubmitWarning && (
           <motion.div
@@ -644,7 +643,6 @@ export default function Quiz() {
         )}
       </AnimatePresence>
 
-      {/* Main Quiz Content - Full screen with no scroll */}
       <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-4xl">
           <AnimatePresence mode="wait">
@@ -655,7 +653,6 @@ export default function Quiz() {
               exit={{ opacity: 0, x: -50 }}
               className="bg-gray-900/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-gray-800 p-4 sm:p-6 shadow-2xl"
             >
-              {/* Progress Header - Simplified */}
               <div className="flex items-center justify-between mb-4 sm:mb-5 pb-3 border-b border-gray-800">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
@@ -686,14 +683,12 @@ export default function Quiz() {
                 </div>
               </div>
 
-              {/* Question Text */}
               <div className="mb-4 sm:mb-5">
                 <h2 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white leading-relaxed break-words">
                   {currentQ.question}
                 </h2>
               </div>
 
-              {/* Options - Compact */}
               <div className="space-y-2 sm:space-y-2.5 mb-4 sm:mb-5">
                 {currentQ.options.map((opt, optIndex) => {
                   const optionLetter = ["A", "B", "C", "D"][optIndex];
@@ -738,7 +733,6 @@ export default function Quiz() {
                 })}
               </div>
 
-              {/* Navigation Buttons */}
               <div className="flex gap-2 sm:gap-3 pt-3 border-t border-gray-800">
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -785,7 +779,6 @@ export default function Quiz() {
           </AnimatePresence>
         </div>
 
-        {/* Question Navigation Numbers - Always visible at bottom */}
         <div className="flex-shrink-0 mt-4 pt-4 border-t border-gray-800 w-full max-w-4xl">
           <div className="flex justify-center gap-1.5 sm:gap-2 flex-wrap">
             {quiz.map((_, idx) => (

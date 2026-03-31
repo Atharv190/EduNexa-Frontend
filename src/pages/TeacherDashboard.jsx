@@ -264,7 +264,6 @@ export default function TeacherDashboard() {
         </div>
       )}
       
-      {/* Navigation */}
       <nav className="sticky top-0 z-50 pt-3 sm:pt-4 px-3 sm:px-6 w-full">
         <motion.div
           initial={{ y: -20, opacity: 0 }}
@@ -412,7 +411,7 @@ export default function TeacherDashboard() {
       </nav>
 
       <main className="w-full max-w-5xl mx-auto px-3 sm:px-5 pt-6 sm:pt-10 pb-16 sm:pb-24 relative z-10">
-        {/* Hero Section */}
+       
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -458,7 +457,7 @@ export default function TeacherDashboard() {
         </motion.div>
 
         <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          {/* Upload Section */}
+          
           {view === "my" && (
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -580,7 +579,6 @@ export default function TeacherDashboard() {
             </motion.div>
           )}
 
-          {/* Library Section */}
           <motion.div
             initial={{ opacity: 0, x: view === "my" ? 20 : 0 }}
             animate={{ opacity: 1, x: 0 }}
@@ -720,7 +718,7 @@ export default function TeacherDashboard() {
                         layoutMode === "list" ? "p-4" : "p-5"
                       }`}
                     >
-                      {/* Background glow effect */}
+
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:via-blue-500/5 group-hover:to-blue-500/5 transition-all duration-500 pointer-events-none"></div>
                       
                       <div className={`flex ${layoutMode === "list" ? "flex-row items-center gap-4" : "flex-col gap-3"}`}>
@@ -765,7 +763,6 @@ export default function TeacherDashboard() {
                             </p>
                           )}
 
-                          {/* Single line buttons - all in one row */}
                           <div className="flex flex-wrap gap-2 w-full">
                             <button
                               onClick={() => handleOpen(file._id)}

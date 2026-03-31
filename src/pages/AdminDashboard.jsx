@@ -133,7 +133,7 @@ export default function AdminDashboard() {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-[#0A0C12] via-[#0F1117] to-[#0A0C12] overflow-x-hidden">
       
-      {/* Premium Animated Background */}
+      
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <motion.div
           variants={floatingOrb}
@@ -160,7 +160,6 @@ export default function AdminDashboard() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(99,102,241,0.03)_1px,transparent_1px)] bg-[size:48px_48px]" />
       </div>
 
-      {/* Mobile Menu Button */}
       <div className="fixed top-4 right-4 z-50 lg:hidden">
         <motion.button
           whileTap={{ scale: 0.95 }}
@@ -171,7 +170,6 @@ export default function AdminDashboard() {
         </motion.button>
       </div>
 
-      {/* Mobile Sidebar */}
       <AnimatePresence>
         {showMobileMenu && (
           <motion.div
@@ -199,7 +197,6 @@ export default function AdminDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Notification Toast */}
       <AnimatePresence>
         {notification.show && (
           <motion.div
@@ -219,7 +216,6 @@ export default function AdminDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Confirmation Modal */}
       <AnimatePresence>
         {showModal && (
           <motion.div
@@ -272,7 +268,6 @@ export default function AdminDashboard() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
-        {/* Header Section */}
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -303,7 +298,6 @@ export default function AdminDashboard() {
               </p>
             </div>
             
-            {/* Logout Button Desktop */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -316,7 +310,6 @@ export default function AdminDashboard() {
           </div>
         </motion.div>
 
-        {/* Stats Grid - Responsive */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -355,7 +348,6 @@ export default function AdminDashboard() {
           ))}
         </motion.div>
 
-        {/* Tabs and Search - Responsive */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-5 sm:mb-8">
           <div className="flex gap-2 p-1 bg-[#0F1117]/60 backdrop-blur-sm rounded-xl border border-white/10 w-full sm:w-auto overflow-x-auto">
             {[
@@ -396,7 +388,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Loading State */}
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 sm:py-32">
             <motion.div
@@ -413,7 +404,6 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Teachers Table - Responsive */}
         {!loading && activeTab === "teachers" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -514,7 +504,6 @@ export default function AdminDashboard() {
           </motion.div>
         )}
 
-        {/* Students Table - Responsive */}
         {!loading && activeTab === "students" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -593,7 +582,6 @@ export default function AdminDashboard() {
           </motion.div>
         )}
 
-        {/* Footer - Responsive */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
