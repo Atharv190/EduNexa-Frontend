@@ -8,10 +8,8 @@ import {
   ChevronRight,
   FileText,
   Sparkles,
-  Plus,
   Layout,
   BookOpen,
-  Trophy,
   Activity,
   Menu,
   X,
@@ -223,12 +221,13 @@ export default function StudentDashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 sm:pt-7 pb-20 relative z-10">
 
-        {/* Hero Section - Increased */}
-        <div className="grid lg:grid-cols-3 gap-5 mb-7">
+        {/* Hero Section - Now with proper 2-column layout */}
+        <div className="grid lg:grid-cols-2 gap-5 mb-7">
+          {/* First Box: Greeting & Hero Content */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-2 rounded-2xl p-6 bg-gradient-to-br from-indigo-900/40 via-purple-900/20 to-[#03050C]/90 border border-white/10 relative overflow-hidden"
+            className="rounded-2xl p-6 bg-gradient-to-br from-indigo-900/40 via-purple-900/20 to-[#03050C]/90 border border-white/10 relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 p-5 opacity-20">
               <Sparkles className="w-40 h-40 transform rotate-12" />
@@ -272,52 +271,73 @@ export default function StudentDashboard() {
               </Link>
             </div>
           </motion.div>
-``
+
+          {/* Second Box: Library Stats Card (moved next to first box) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-2xl p-6 bg-white/[0.03] border border-white/10 flex flex-col relative overflow-hidden"
+            className="rounded-2xl p-6 bg-gradient-to-br from-purple-900/30 via-indigo-900/20 to-[#03050C]/90 border border-white/10 flex flex-col relative overflow-hidden"
           >
-            <div className="absolute -right-3 -top-3 w-24 h-24 bg-purple-500/20 rounded-full blur-2xl" />
+            <div className="absolute -right-3 -top-3 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl" />
+            <div className="absolute -left-3 -bottom-3 w-28 h-28 bg-purple-500/20 rounded-full blur-2xl" />
             
             <div className="relative z-10">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500/30 to-indigo-500/30 rounded-xl flex items-center justify-center mb-4 border border-purple-500/30">
-                <Trophy className="text-purple-400" size={22} />
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-14 h-14 bg-gradient-to-br from-indigo-500/30 to-purple-500/30 rounded-2xl flex items-center justify-center border border-indigo-500/30">
+                  <BookOpen className="text-indigo-400" size={26} />
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                    Total Resources
+                  </p>
+                  <h3 className="text-5xl font-bold text-white">
+                    {totalFiles}
+                  </h3>
+                </div>
               </div>
               
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-                Total Materials
-              </p>
-              <h3 className="text-5xl font-bold text-white mb-2">
-                {totalFiles}
-              </h3>
-              
-              <p className="text-xs text-slate-500">
-                {totalFiles === 0 ? "No materials yet" : `${totalFiles} item${totalFiles !== 1 ? 's' : ''} available`}
-              </p>
-            </div>
+              <div className="mt-4 space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-400">Available materials</span>
+                  <span className="text-white font-semibold">{totalFiles}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-400">Recent updates</span>
+                  <span className="text-green-400 font-semibold">{recentFiles.length} new</span>
+                </div>
+                <div className="w-full h-1.5 bg-white/10 rounded-full mt-2 overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min((recentFiles.length / Math.max(totalFiles, 1)) * 100, 100)}%` }}
+                  />
+                </div>
+              </div>
 
-            <Link 
-              to="/files" 
-              className="mt-5 flex items-center justify-between bg-white/5 hover:bg-white/10 px-3.5 py-2.5 rounded-lg transition-all text-sm font-medium"
-            >
-              <span>View Library</span>
-              <Plus size={15} />
-            </Link>
+              <Link 
+                to="/files" 
+                className="mt-6 flex items-center justify-between bg-white/10 hover:bg-white/20 px-4 py-3 rounded-xl transition-all text-sm font-medium border border-white/5"
+              >
+                <span>Browse Library</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-indigo-400">Explore</span>
+                  <ChevronRight size={16} className="text-indigo-400" />
+                </div>
+              </Link>
+            </div>
           </motion.div>
         </div>
 
-        {/* Stats Cards Section - Increased */}
+        {/* Stats Cards Section - Enhanced */}
         <div className="grid sm:grid-cols-3 gap-5 mb-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-xl p-5 bg-white/[0.03] border border-white/10 hover:border-sky-500/30 transition-all"
+            className="rounded-xl p-5 bg-white/[0.03] border border-white/10 hover:border-sky-500/30 transition-all group"
           >
             <div className="flex items-start justify-between mb-3">
-              <div className="w-11 h-11 bg-sky-500/20 rounded-xl flex items-center justify-center border border-sky-500/30">
+              <div className="w-11 h-11 bg-sky-500/20 rounded-xl flex items-center justify-center border border-sky-500/30 group-hover:scale-110 transition-transform">
                 <Activity className="text-sky-400 w-5.5 h-5.5" />
               </div>
               <TrendingUp size={15} className="text-green-400" />
@@ -330,13 +350,13 @@ export default function StudentDashboard() {
 
           <Link
             to="/files"
-            className="rounded-xl p-5 bg-white/[0.03] border border-white/10 hover:border-indigo-500/30 transition-all block"
+            className="rounded-xl p-5 bg-white/[0.03] border border-white/10 hover:border-indigo-500/30 transition-all block group"
           >
             <div className="flex items-start justify-between mb-3">
-              <div className="w-11 h-11 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30">
+              <div className="w-11 h-11 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 group-hover:scale-110 transition-transform">
                 <BookOpen className="text-indigo-400 w-5.5 h-5.5" />
               </div>
-              <ChevronRight size={17} className="text-slate-500" />
+              <ChevronRight size={17} className="text-slate-500 group-hover:text-indigo-400 transition-colors" />
             </div>
             <h3 className="text-base font-semibold text-white mb-1.5">Continue Learning</h3>
             <p className="text-sm text-slate-400">Resume your studies</p>
@@ -346,10 +366,10 @@ export default function StudentDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="rounded-xl p-5 bg-white/[0.03] border border-amber-500/20 hover:border-amber-500/40 transition-all relative"
+            className="rounded-xl p-5 bg-white/[0.03] border border-amber-500/20 hover:border-amber-500/40 transition-all relative group"
           >
             <div className="absolute top-3 right-3 text-[10px] font-bold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-full">AI</div>
-            <div className="w-11 h-11 bg-amber-500/20 rounded-xl flex items-center justify-center border border-amber-500/30 mb-3">
+            <div className="w-11 h-11 bg-amber-500/20 rounded-xl flex items-center justify-center border border-amber-500/30 mb-3 group-hover:scale-110 transition-transform">
               <Sparkles className="text-amber-400 w-5.5 h-5.5" />
             </div>
             <h3 className="text-base font-semibold text-white mb-1.5">AI Assistant</h3>
@@ -357,14 +377,14 @@ export default function StudentDashboard() {
           </motion.div>
         </div>
 
-        {/* Recent Materials Section - Increased */}
+        {/* Recent Materials Section */}
         <section>
           <div className="flex justify-between items-center mb-5">
             <div className="flex items-center gap-2.5">
               <Layout className="text-indigo-400 w-5.5 h-5.5" />
               <h2 className="text-xl font-bold text-white">Recent Materials</h2>
             </div>
-            <Link to="/files" className="text-indigo-400 text-sm font-medium flex items-center gap-1.5">
+            <Link to="/files" className="text-indigo-400 text-sm font-medium flex items-center gap-1.5 hover:gap-2 transition-all">
               See all <ChevronRight size={15} />
             </Link>
           </div>
@@ -377,11 +397,11 @@ export default function StudentDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   key={file._id}
-                  className="rounded-xl p-5 bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all"
+                  className="rounded-xl p-5 bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all group"
                 >
                   <div className="flex items-start gap-3.5 mb-4">
-                    <div className="w-11 h-11 bg-white/5 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <FileText className="text-slate-400 w-5.5 h-5.5" />
+                    <div className="w-11 h-11 bg-white/5 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-indigo-500/10 transition-colors">
+                      <FileText className="text-slate-400 group-hover:text-indigo-400 w-5.5 h-5.5 transition-colors" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-base font-semibold text-white truncate">{file.title}</h3>
@@ -415,7 +435,7 @@ export default function StudentDashboard() {
               </div>
               <h3 className="font-semibold text-white mb-1.5 text-base">No materials yet</h3>
               <p className="text-sm text-slate-400 mb-4">Explore the library to get started</p>
-              <Link to="/files" className="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-400 px-4 py-2 rounded-lg text-sm font-medium">
+              <Link to="/files" className="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-500/20 transition-all">
                 Browse Library <ChevronRight size={14} />
               </Link>
             </div>
@@ -423,7 +443,7 @@ export default function StudentDashboard() {
         </section>
       </main>
 
-      {/* Profile Modal - Increased */}
+      {/* Profile Modal */}
       <AnimatePresence>
         {showProfile && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -485,4 +505,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
