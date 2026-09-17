@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+# 🎓 EduNexa — Smart Learning Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**EduNexa** is a modern, AI-powered Smart Learning Platform built to provide students with an organized and interactive learning experience. The platform enables students to access educational resources, generate AI-powered summaries and quizzes, while instructors can manage learning materials and administrators can manage the platform.
 
-## Available Scripts
+This repository contains the **frontend application** of EduNexa, developed using React.js and Vite.
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+* 🔐 User authentication with email OTP verification
+* 👥 Role-based interface for Students, Instructors, and Administrators
+* 📚 Browse and access learning resources
+* 📤 Instructor resource upload and management
+* 🤖 AI-powered content summarization
+* 📝 AI-generated quizzes from learning materials
+* 🛡️ Protected routes and role-based access
+* 🔄 REST API integration with Axios
+* 📱 Responsive and user-friendly interface
+* 🎯 Dedicated dashboards based on user roles
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 👥 User Roles
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 👨‍🎓 Student
 
-### `npm test`
+* Access approved learning resources
+* View and download study materials
+* Generate AI-powered summaries
+* Generate and attempt quizzes
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 👨‍🏫 Instructor
 
-### `npm run build`
+* Upload learning materials
+* Manage educational resources
+* Track resource approval status
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 👨‍💼 Administrator
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Manage users
+* Manage instructors
+* Review and approve learning resources
+* Manage platform activities
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Tech Stack
 
-### `npm run eject`
+* **React.js** — UI development
+* **Vite** — Frontend build tool
+* **JavaScript** — Application logic
+* **Bootstrap** — Responsive UI
+* **Axios** — REST API communication
+* **React Router** — Client-side routing
+* **JWT** — Authentication
+* **HTML5 & CSS3** — Structure and styling
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🔄 Application Workflow
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```text
+User Registration
+       ↓
+Email OTP Verification
+       ↓
+Login
+       ↓
+JWT Authentication
+       ↓
+Role-Based Dashboard
+       ↓
+Access Platform Features
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Student Learning Workflow
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```text
+Student
+   ↓
+Browse Learning Resources
+   ↓
+Select Material
+   ↓
+View / Download
+   ↓
+Generate AI Summary
+   ↓
+Generate Quiz
+   ↓
+Attempt Quiz
+```
 
-## Learn More
+## 🤖 AI-Powered Learning
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+EduNexa integrates AI functionality to improve the learning experience.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### AI Summarization
 
-### Code Splitting
+Students can generate concise summaries from learning materials, helping them understand lengthy content and revise important concepts efficiently.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### AI Quiz Generation
 
-### Analyzing the Bundle Size
+The platform can generate quiz questions from learning materials, allowing students to test their understanding and practice important concepts.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🔗 Backend Integration
 
-### Making a Progressive Web App
+The frontend communicates with the EduNexa backend through RESTful APIs.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+**Backend Repository:**
+`https://github.com/Atharv190/EduNexa-Backend`
 
-### Advanced Configuration
+The frontend uses Axios to communicate with APIs for:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+* Authentication
+* User management
+* Learning resources
+* File operations
+* AI summarization
+* Quiz generation
+* Role-based operations
 
-### Deployment
+## 🔒 Security
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The frontend implements:
 
-### `npm run build` fails to minify
+* Protected routes
+* JWT-based authentication
+* Role-based navigation
+* Authentication state handling
+* Secure API communication
+* Environment-based API configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## ⚙️ Installation
+
+### Prerequisites
+
+* Node.js
+* npm
+* Git
+
+### Clone the Repository
+
+```bash
+git clone YOUR_FRONTEND_REPOSITORY_LINK
+cd EduNexa-Frontend
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+VITE_API_URL=YOUR_BACKEND_API_URL
+```
+
+### Run the Application
+
+```bash
+npm run dev
+```
+
+The application will start on the Vite development server.
